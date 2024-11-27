@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingHeader } from "./_components/marketing-header";
+import { MarketingFooter } from "./_components/marketing-footer";
 
 export const metadata: Metadata = {
   title: "Calihub - Calisthenics companion",
@@ -8,10 +9,13 @@ export const metadata: Metadata = {
 
 const MarketingLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <div className="h-full bg-neutral-300">
       <MarketingHeader />
-      <main className="max-w-4xl w-full m-auto flex flex-col items-center">{children}</main>
-    </>
+      <main className="max-w-4xl w-full m-auto flex flex-col items-center">
+        {children}
+      </main>
+      <MarketingFooter />
+    </div>
   );
 };
 
