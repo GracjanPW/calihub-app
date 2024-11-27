@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Roboto } from "next/font/google";
+import Link from "next/link";
 
 const font = Roboto({
   subsets: ["latin"],
@@ -17,10 +18,16 @@ export const MarketingHeader = () => {
           CALIHUB
         </div>
         <div className="space-x-2">
-          <Button variant={"ghost"} size={"sm"}>
-            Sign up
+          <Button variant={"ghost"} size={"sm"} asChild>
+            <Link href="/auth/sign-up">
+              Sign up
+            </Link>
           </Button>
-          <Button size={"sm"}>Login</Button>
+          <Button size={"sm"} asChild>
+            <Link href="/auth/sign-in">
+              Login
+            </Link>
+          </Button>
         </div>
       </div>
     </header>
