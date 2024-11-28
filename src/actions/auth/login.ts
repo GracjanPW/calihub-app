@@ -1,6 +1,6 @@
 "use server";
 
-import { DEFAULT_AUTH_REDIRECT } from "@/constant";
+import { DEFAULT_AUTH_REDIRECT } from "@/routes";
 import { signIn } from "@/lib/auth";
 import { getUserByEmail } from "@/lib/db/user";
 import { AuthError } from "next-auth";
