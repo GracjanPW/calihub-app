@@ -1,20 +1,20 @@
 import { Separator } from "@/components/ui/separator";
 import { AuthCard } from "../../_components/auth-card";
 import { AuthProviders } from "../../_components/auth-providers";
-import { SignInForm } from "../../_components/sign-in-form";
+import { SignUpForm } from "../../_components/sign-up-form";
 
-const SignInPage = () => {
+const SignUpPage = () => {
   return (
     <AuthCard
-      title="Sign In"
-      footerText="Don't have an account?"
-      footerUrl="/auth/sign-up"
+      title="Sign Up"
+      footerText="Have an account already?"
+      footerUrl="/auth/sign-in"
     >
-      <SignInForm />
+      <SignUpForm />
       <Separator />
       <AuthProviders />
     </AuthCard>
   );
 };
 
-export default SignInPage;
+export default SignUpPage;
