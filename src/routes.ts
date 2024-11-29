@@ -1,6 +1,11 @@
 export const PUBLIC_ROUTES = ["/"];
 
-export const AUTH_ROUTES = ["/auth/sign-in", "/auth/sign-up"];
+export const AUTH_ROUTES = [
+  "/auth/sign-in",
+  "/auth/sign-up",
+  "/auth/password-reset",
+  "/auth/new-password"
+];
 
 export const AUTH_API_PREFIX = "/api/auth";
 

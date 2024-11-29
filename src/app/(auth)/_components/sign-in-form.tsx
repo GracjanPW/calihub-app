@@ -5,6 +5,7 @@ import { FormError } from "@/components/form/form-error";
 import { FormSuccess } from "@/components/form/form-success";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import { useActionState } from "react";
 
 export const SignInForm = () => {
@@ -27,6 +28,11 @@ export const SignInForm = () => {
         disabled={pending} 
         required
       />
+      <Button variant={'link'} asChild size={'link'}>
+        <Link href="/auth/password-reset">
+          Forgot password?
+        </Link>
+      </Button>
       {state?.error && <FormError message={state.error}/>}
       {state?.success && <FormSuccess message={state.success}/>}
       <Button disabled={pending} className="w-full">
