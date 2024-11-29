@@ -16,18 +16,17 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String     @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String     @unique
   emailVerified DateTime?
   image         String?
   password      String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   accounts      Account[]
   sessions      Session[]
-
-  // Optional for WebAuthn support
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Exercise      Exercise[]
 }
 
 model Account {
@@ -71,8 +70,17 @@ model VerificationToken {
 model PasswordResetToken {
   id        String   @id @default(uuid())
   email     String
-  token     String   @db.Text
+  token     String   @unique @db.Text
   expiresAt DateTime
 
   @@unique([email, token])
+}
+
+model Exercise {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
