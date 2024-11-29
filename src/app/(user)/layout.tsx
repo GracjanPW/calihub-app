@@ -1,5 +1,20 @@
-const UserLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
+import { auth } from "@/lib/auth";
+import { DEFAULT_AUTH_PAGE } from "@/routes";
+import { redirect } from "next/navigation";
+import { UserBar } from "./_components/user-bar";
+import { User } from "@prisma/client";
+
+const UserLayout = async ({ children }: { children: React.ReactNode }) => {
+  const data = await auth();
+  if (!data?.user) {
+    return redirect(DEFAULT_AUTH_PAGE);
+  }
+  return (
+    <div>
+      <UserBar user={data.user as User} />
+      {children}
+    </div>
+  );
 };
 
 export default UserLayout;
