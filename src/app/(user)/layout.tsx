@@ -10,7 +10,7 @@ const UserLayout = async ({ children }: { children: React.ReactNode }) => {
     return redirect(DEFAULT_AUTH_PAGE);
   }
   return (
-    <div>
+    <div className="relative h-full flex flex-col">
       <UserBar user={data.user as User} />
       {children}
     </div>
