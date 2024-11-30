@@ -9,26 +9,36 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
-import { usePathname } from "next/navigation";
-import { NavItem } from "./nav-item";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const nav_items = [
   {
     label: "Dashboard",
     href: "/dashboard",
-    icon: Boxes,
+    Icon: Boxes,
   },
   {
     label: "Exercises",
     href: "/exercises",
-    icon: LucideWeight,
+    Icon: LucideWeight,
   },
 ];
 
 export const UserNav = () => {
   const pathname = usePathname();
+  const [open,setOpen] = useState(false)
+  const router = useRouter();
+
+  
+  const onClick = (url:string)=> {
+    router.push(url)
+    setOpen(false)
+  }
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant={"ghostDark"} size={"icon"}>
           <Menu className="text-neutral-300 !size-8" />
@@ -41,13 +51,18 @@ export const UserNav = () => {
         <Separator className="my-2" />
         <div className="space-y-2">
           {nav_items.map((item) => (
-            <NavItem
-              key={item.label}
-              label={item.label}
-              href={item.href}
-              active={item.href === pathname}
-              Icon={item.icon}
-            />
+            <Button
+            key={item.href}
+            variant={"ghost"}
+            className={cn(
+              "w-full justify-start items-center text-xl",
+              item.href === pathname && "bg-accent"
+            )}
+            onClick={()=>onClick(item.href)}
+          >
+            <item.Icon className="!size-6" />
+            {item.label}
+          </Button>
           ))}
         </div>
       </SheetContent>
