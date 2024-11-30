@@ -35,7 +35,9 @@ export const WeekSelector = ({
     const from = startOfWeek(date, {
       weekStartsOn: 1,
     }).toDateString();
-    const to = endOfWeek(date).toDateString();
+    const to = endOfWeek(date,{
+      weekStartsOn:1
+    }).toDateString();
     return {
       from,
       to,
