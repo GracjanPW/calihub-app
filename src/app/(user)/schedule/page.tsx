@@ -12,18 +12,17 @@ const SchedulePage = async ({
   }>;
 }) => {
   const { from, to } = await searchParams;
-  const today = new Date();
 
   const schedule = await getSchedule(from, to);
 
   return (
-    <div className="relative px-6 space-y-4 flex-1 pb-4 flex flex-col">
+    <div className="relative px-6 space-y-4 flex-1 pb-4 flex flex-col justify-start">
       <PageHeader>
-        <h1 className="text-3xl font-semibold tracking-wider text-neutral-800">
+        <h1 className="text-2xl font-semibold tracking-wider text-neutral-100">
           Schedule
         </h1>
       </PageHeader>
-      <WeekSelector defaultTo={to} defaultFrom={from} today={today} />
+      <WeekSelector defaultTo={to} defaultFrom={from} />
       <ScheduleList data={schedule} />
     </div>
   );

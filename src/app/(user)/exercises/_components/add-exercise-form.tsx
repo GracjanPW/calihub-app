@@ -1,3 +1,4 @@
+"use client"
 import { createExercise } from "@/actions/exercises/create-exercise"
 import { FormError } from "@/components/form/form-error"
 import { Button } from "@/components/ui/button"

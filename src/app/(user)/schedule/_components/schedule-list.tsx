@@ -15,6 +15,7 @@ import { useState } from "react";
 import { AddScheduleForm } from "./add-schedule-form";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
+import { ScheduleDay } from "./schedule-day";
 
 // TODO: select date automatically for add schedule
 
@@ -28,39 +29,13 @@ interface ScheduleListProps {
 export const ScheduleList = ({ data }: ScheduleListProps) => {
   const [openAdd, setOpenAdd] = useState(false);
 
-  if (data.length === 0) return <div>Problem retrieving schedule</div>;
+  if (data.length === 0) return <div className="flex-1">Problem retrieving schedule</div>;
   return (
     <>
       <div className="flex flex-col flex-1 overflow-y-auto">
         <div className="max-h-0 space-y-4">
           {data.map((day, i) => (
-            <div key={day.date.toDateString()}>
-              <div className="flex justify-between">
-                <p className="text-lg font-semibold">
-                  {format(day.date, "EEEE")}
-                </p>
-                <Button
-                  variant={"outline"}
-                  size={"icon"}
-                  onClick={() => setOpenAdd(true)}
-                >
-                  <Plus />
-                </Button>
-              </div>
-              <Separator className="my-1" />
-              <ul className="space-y-2 mb-2">
-                {day.schedule.length === 0 && (
-                  <div className="bg-slate-300 rounded-md p-4">
-                    No exercies scheduled, you can rest 🥺
-                  </div>
-                )}
-                {day.schedule.map((schedule, j) => (
-                  <div key={`${i}-${j}`} className="bg-muted p-1 rounded-md ">
-                    {schedule.exercise.name}
-                  </div>
-                ))}
-              </ul>
-            </div>
+            <ScheduleDay key={day.date.toDateString()} date={day.date} schedule={day.schedule} addSchedule={()=>setOpenAdd(true)} />
           ))}
         </div>
       </div>

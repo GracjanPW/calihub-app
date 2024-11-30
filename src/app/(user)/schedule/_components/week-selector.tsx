@@ -16,13 +16,11 @@ import { usePathname, useRouter } from "next/navigation";
 interface WeekSelectorProps {
   defaultFrom: string;
   defaultTo: string;
-  today: Date;
 }
 
 export const WeekSelector = ({
   defaultFrom,
   defaultTo,
-  today,
 }: WeekSelectorProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -72,18 +70,22 @@ export const WeekSelector = ({
     const endDate = toDate(dateRange.to);
     return `${format(fromDate, "do LLL")} - ${format(endDate, "do LLL")}`;
   }, [dateRange.from, dateRange.to]);
+
   useEffect(() => {
+    console.log(dateRange)
+    console.log(defaultFrom, defaultTo)
     if (!dateRange.to || !dateRange.from) {
+      const today = new Date()
       setNewDateRange(today);
     }
-  }, [dateRange.from, dateRange.to, today, setNewDateRange]);
+  }, [dateRange.from, dateRange.to, setNewDateRange]);
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center border rounded-md">
       <Button variant={"ghost"} size={"icon"} onClick={prevWeek}>
-        <ChevronLeft />
+        <ChevronLeft/>
       </Button>
-      <p>{currentPeriod}</p>
+      <p className="text-lg">{currentPeriod}</p>
       <Button variant={"ghost"} size={"icon"} onClick={nextWeek}>
         <ChevronRight />
       </Button>

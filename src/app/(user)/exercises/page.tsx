@@ -8,7 +8,7 @@ const ExercisesPage = async () => {
   return (
     <div className="relative px-6 space-y-4 flex-1 flex flex-col pb-4">
       <PageHeader>
-        <h1 className="text-3xl font-semibold tracking-wider text-neutral-800">
+        <h1 className="text-2xl font-semibold tracking-wider text-neutral-100">
             Exercises
         </h1>
       </PageHeader>
