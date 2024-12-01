@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { ScheduleDay } from "./schedule-day";
 
-// TODO: select date automatically for add schedule
+
 
 interface ScheduleListProps {
   data: {
@@ -28,14 +28,20 @@ interface ScheduleListProps {
 
 export const ScheduleList = ({ data }: ScheduleListProps) => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [defaultDate, setDefaultDate] = useState<Date>()
+
+  const openAddDrawer = (date?:Date) => {
+    setDefaultDate(date)
+    setOpenAdd(true)
+  }
 
   if (data.length === 0) return <div className="flex-1">Problem retrieving schedule</div>;
   return (
     <>
       <div className="flex flex-col flex-1 overflow-y-auto">
-        <div className="max-h-0 space-y-4">
+        <div className="max-h-0 space-y-6">
           {data.map((day, i) => (
-            <ScheduleDay key={day.date.toDateString()} date={day.date} schedule={day.schedule} addSchedule={()=>setOpenAdd(true)} />
+            <ScheduleDay key={day.date.toDateString()} date={day.date} schedule={day.schedule} addSchedule={()=>openAddDrawer(day.date)} />
           ))}
         </div>
       </div>
@@ -49,7 +55,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
             </DrawerDescription>
           </DrawerHeader>
           <div className="px-4">
-            <AddScheduleForm onSuccess={() => setOpenAdd(false)} />
+            <AddScheduleForm defaultValues={{date:defaultDate}} onSuccess={() => setOpenAdd(false)} />
           </div>
           <DrawerFooter>
             <DialogClose asChild>

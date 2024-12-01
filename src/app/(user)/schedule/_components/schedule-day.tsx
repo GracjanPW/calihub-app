@@ -6,6 +6,7 @@ import { Exercise, Schedule } from "@prisma/client";
 import { format } from "date-fns";
 import { ChevronDown, ChevronLeft, Plus } from "lucide-react";
 import { useState } from "react";
+import { ScheduleItem } from "./schedule-item";
 
 interface ScheduleDayProps {
   date: Date;
@@ -22,9 +23,9 @@ export const ScheduleDay = ({
   return (
     <div key={date.toDateString()}>
       <div className="flex justify-between items-center">
-        <Button onClick={()=>setFull((prev)=>!prev)} variant={'ghost'} className="text-xl font-bold text-neutral-700 flex items-center" >
-          <ChevronDown className={cn("mr-1 transition",full && "rotate-90")}/>
-          {format(date, "EEEE")}
+        <Button onClick={()=>setFull((prev)=>!prev)} variant={'ghost'} className="text-lg font-bold text-neutral-700 flex items-center" >
+          {format(date, "EEEE, do MMM")}
+          <ChevronDown className={cn("mr-1 transition",full && "-rotate-90")}/>
         </Button>
         <Button variant={"outline"} size={"icon"} onClick={addSchedule}>
           <Plus className="text-neutral-800" />
@@ -39,16 +40,11 @@ export const ScheduleDay = ({
         )}
         {
           !full && schedule.map((schedule)=>(
-            <Badge key={schedule.id} variant={'outline'} className="text-md">{schedule.exercise.name}</Badge>
+            <Badge key={schedule.id} variant={'outline'} className="text-md text-neutral-700">{schedule.exercise.name}</Badge>
           ))
         }
         {full && schedule.map((schedule) => (
-          <div
-            key={schedule.id}
-            className="bg-neutral-200 p-1 px-4 rounded-md text-neutral-700 font-medium"
-          >
-            {schedule.exercise.name}
-          </div>
+          <ScheduleItem key={schedule.id} data={schedule}/>
         ))}
       </div>
     </div>

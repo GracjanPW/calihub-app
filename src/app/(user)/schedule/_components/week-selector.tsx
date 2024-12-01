@@ -72,8 +72,6 @@ export const WeekSelector = ({
   }, [dateRange.from, dateRange.to]);
 
   useEffect(() => {
-    console.log(dateRange)
-    console.log(defaultFrom, defaultTo)
     if (!dateRange.to || !dateRange.from) {
       const today = new Date()
       setNewDateRange(today);
@@ -85,7 +83,7 @@ export const WeekSelector = ({
       <Button variant={"ghost"} size={"icon"} onClick={prevWeek}>
         <ChevronLeft/>
       </Button>
-      <p className="text-lg">{currentPeriod}</p>
+      <p className="text-lg font-semibold">{currentPeriod}</p>
       <Button variant={"ghost"} size={"icon"} onClick={nextWeek}>
         <ChevronRight />
       </Button>

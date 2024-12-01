@@ -13,7 +13,14 @@ import {
 import { useGetExercises } from "@/hooks/use-get-exercies";
 import { startTransition, useActionState, useEffect, useState } from "react";
 
-export const AddScheduleForm = ({ onSuccess }: { onSuccess?: () => void }) => {
+interface AddScheduleFormProps {
+  defaultValues?:{
+    date?:Date
+  }
+  onSuccess?: () => void
+}
+
+export const AddScheduleForm = ({ defaultValues, onSuccess }:AddScheduleFormProps) => {
   const [state, action, pending] = useActionState(addSchedule, {
     error: null,
     success: false,
@@ -35,6 +42,12 @@ export const AddScheduleForm = ({ onSuccess }: { onSuccess?: () => void }) => {
       onSuccess?.();
     }
   }, [state.success]);
+
+  useEffect(()=>{
+    if (defaultValues?.date) {
+      setDate(defaultValues.date)
+    }
+  },[defaultValues])
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
