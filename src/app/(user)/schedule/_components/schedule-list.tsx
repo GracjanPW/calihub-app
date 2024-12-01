@@ -10,11 +10,8 @@ import {
 } from "@/components/ui/drawer";
 import { Exercise, Schedule } from "@prisma/client";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { format } from "date-fns";
 import { useState } from "react";
 import { AddScheduleForm } from "./add-schedule-form";
-import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
 import { ScheduleDay } from "./schedule-day";
 
 
@@ -40,7 +37,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
     <>
       <div className="flex flex-col flex-1 overflow-y-auto">
         <div className="max-h-0 space-y-6">
-          {data.map((day, i) => (
+          {data.map((day) => (
             <ScheduleDay key={day.date.toDateString()} date={day.date} schedule={day.schedule} addSchedule={()=>openAddDrawer(day.date)} />
           ))}
         </div>

@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Exercise, Schedule } from "@prisma/client";
 import { format } from "date-fns";
-import { ChevronDown, ChevronLeft, Plus } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { ScheduleItem } from "./schedule-item";
 

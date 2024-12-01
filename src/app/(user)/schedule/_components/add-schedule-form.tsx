@@ -67,7 +67,7 @@ export const AddScheduleForm = ({ defaultValues, onSuccess }:AddScheduleFormProp
       <DatePicker date={date} setDate={setDate} />
       {state.error && <FormError message={state.error} />}
       {state.success && <FormError message="Created!" />}
-      <Button className="w-full">Add</Button>
+      <Button className="w-full" disabled={pending}>Add</Button>
     </form>
   );
 };

@@ -54,7 +54,9 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        /* tslint:disable:no-unused-variable */
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
+        /* tslint:disable:no-unused-variable */
         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}
