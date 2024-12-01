@@ -41,7 +41,7 @@ export const AddScheduleForm = ({ defaultValues, onSuccess }:AddScheduleFormProp
     if (state.success) {
       onSuccess?.();
     }
-  }, [state.success]);
+  }, [state.success, onSuccess]);
 
   useEffect(()=>{
     if (defaultValues?.date) {
