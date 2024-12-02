@@ -2,49 +2,81 @@
 
 import { getUser } from "@/lib/auth/get-user";
 import { db } from "@/lib/db";
-import { toDate } from "date-fns";
+import { AddScheduleSchema } from "@/schema/schedule.schema";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-type State = {
-  error: string | null;
-  success: boolean;
-};
+type GroupedSets = {
+    sets: string;
+    weight: string;
+    reps: string;
+    duration: string;
+}[]
 
-export async function addSchedule(
-  prevState: Partial<State>,
-  formData: FormData
-): Promise<State> {
-  const exerciseId = formData.get("exerciseId") as string;
-  const dateString = formData.get("date") as string;
-  const date = toDate(dateString);
-  console.log({ exerciseId, date, dateString });
-  if (!date || !exerciseId)
-    return {
-      error: "Missing required fields",
-      success: false,
-    };
+const separateSets = (groupedSets:GroupedSets) =>{
+  const ungroupedSets = []
+  for (const set of groupedSets) {
+    for (let i = 0; i<Number(set.sets);i++){
+      ungroupedSets.push({
+        reps:set.reps,
+        weight:set.weight,
+        duration:set.duration
+      })
+    }
+  }
+  return ungroupedSets
+}
 
+export async function addSchedule(values: z.infer<typeof AddScheduleSchema>) {
   const user = await getUser();
-
   if (!user || !user.id) throw new Error("Unauthorized");
+
+  const { data } = AddScheduleSchema.safeParse(values);
+
+  if (!data) throw new Error("Invalid input types");
+
+  const dbReadyData = {
+    ...data,
+    sets: separateSets(data.sets).map((set, i) => {
+      const weight = Number(set.weight);
+      const duration = Number(set.duration);
+      const reps = Number(set.reps)
+      const order = i;
+      const exerciseId = data.exerciseId;
+      return {
+        weight,
+        reps,
+        duration,
+        order,
+        exerciseId,
+      };
+    }),
+  };
+
+  const existingExercise = await db.exercise.findUnique({
+    where: {
+      userId: user.id,
+      id: data.exerciseId,
+    },
+  });
+  if (!existingExercise) throw new Error("Exercise doesn't exist");
 
   const schedule = await db.schedule.create({
     data: {
       userId: user.id,
-      exerciseId,
-      date,
+      exerciseId: dbReadyData.exerciseId,
+      date: dbReadyData.date,
+      exerciseSets: {
+        createMany: {
+          data: dbReadyData.sets,
+        },
+      },
     },
   });
 
-  if (!schedule)
-    return {
-      error: "Something went wrong, try again",
-      success: false,
-    };
+  if (!schedule) throw new Error("Something went wrong")
 
-  revalidatePath("/schedule");
-  return {
-    error: null,
-    success: true,
-  };
+    // TODO: revalidate specific 
+  revalidatePath("/schedule")
+  return schedule.id
 }

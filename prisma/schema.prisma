@@ -78,20 +78,42 @@ model PasswordResetToken {
 }
 
 model Exercise {
-  id        String     @id @default(uuid())
-  name      String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  userId    String
-  user      User       @relation(references: [id], fields: [userId], onDelete: Cascade)
-  schedule  Schedule[]
+  id           String        @id @default(uuid())
+  name         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       String
+  user         User          @relation(references: [id], fields: [userId], onDelete: Cascade)
+  schedule     Schedule[]
+  exerciseSets ExerciseSet[]
 }
 
 model Schedule {
-  id         String   @id @default(uuid())
+  id           String        @id @default(uuid())
+  exerciseId   String
+  exercise     Exercise      @relation(references: [id], fields: [exerciseId], onDelete: Cascade)
+  date         DateTime
+  userId       String
+  user         User          @relation(references: [id], fields: [userId], onDelete: Cascade)
+  exerciseSets ExerciseSet[]
+}
+
+model ExerciseSet {
+  id                String @id @default(uuid())
+  weight            Int?
+  completedWeight   Int?
+  reps              Int?
+  completedReps     Int?
+  duration          Int?
+  completedDuration Int?
+  rpe               Int?
+  order             Int
+
   exerciseId String
   exercise   Exercise @relation(references: [id], fields: [exerciseId], onDelete: Cascade)
-  date       DateTime
-  userId     String
-  user       User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  scheduleId String
+  shedule    Schedule @relation(references: [id], fields: [scheduleId], onDelete: Cascade)
+
+  @@unique([order, scheduleId])
 }
