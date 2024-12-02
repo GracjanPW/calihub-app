@@ -35,6 +35,15 @@ export async function getSchedule(
             name: true,
           },
         },
+        exerciseSets: {
+          select:{
+            weight:true,
+            order:true,
+            reps:true,
+            duration:true
+          }
+        }
+
       },
     });
     const allDays = eachDayOfInterval({

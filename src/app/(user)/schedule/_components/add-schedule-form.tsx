@@ -56,7 +56,7 @@ export const AddScheduleForm = ({
     resolver: zodResolver(AddScheduleSchema),
     defaultValues: {
       exerciseId: "",
-      date: undefined,
+      date: defaultValues?.date,
       sets: [],
     },
   });
@@ -92,13 +92,7 @@ export const AddScheduleForm = ({
         });
     });
   };
-
-  useEffect(() => {
-    if (defaultValues?.date) {
-      form.setValue("date", defaultValues.date);
-    }
-  }, [defaultValues?.date, form]);
-
+  // TODO: display validation error messages
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
@@ -275,7 +269,7 @@ export const AddScheduleForm = ({
         </Button>
         <Button
           className="w-full"
-          disabled={form.formState.isLoading || pending}
+          disabled={pending}
         >
           Add workout
         </Button>
