@@ -1,7 +1,7 @@
-import React, { forwardRef, LegacyRef } from "react";
+import React, { forwardRef } from "react";
 import chroma from "chroma-js";
 
-import Select, { GroupBase, StylesConfig } from "react-select";
+import Select, { StylesConfig } from "react-select";
 
 type LabelOption = {
   label: string;
