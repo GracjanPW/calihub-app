@@ -48,27 +48,25 @@ export const AddLabelForm = ({ onSuccess }: { onSuccess: () => void }) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
-          disabled={pending}
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input {...field} />
-                  <div
-                    className="absolute size-6 rounded-md aspect-square right-2 top-1/2 -translate-y-1/2"
-                    style={{ backgroundColor: previewColor.color }}
-                  />
-                </div>
-              </FormControl>
+              <div className="relative">
+                <FormControl>
+                  <Input {...field} disabled={pending} />
+                </FormControl>
+                <div
+                  className="absolute size-6 rounded-md aspect-square right-2 top-1/2 -translate-y-1/2"
+                  style={{ backgroundColor: previewColor.color }}
+                />
+              </div>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
-          disabled={pending}
           control={form.control}
           name="color"
           render={({ field }) => (

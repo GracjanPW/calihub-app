@@ -1,8 +1,8 @@
-import { Exercise } from "@prisma/client";
+import { Exercise, ExerciseLabel, Label } from "@prisma/client";
 import { ExerciseItem } from "./exercise-item";
 
 interface ExerciseListProps {
-  data: Pick<Exercise, "id" | "name">[];
+  data: (Exercise & { exerciseLabels: (ExerciseLabel & { label: Label })[] })[];
 }
 
 export const ExerciseList = ({ data }: ExerciseListProps) => {

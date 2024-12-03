@@ -14,9 +14,12 @@ export async function getAllExercises() {
       where: {
         userId: currentUser.id,
       },
-      select: {
-        name: true,
-        id: true,
+      include: {
+        exerciseLabels: {
+          include: {
+            label: true,
+          },
+        },
       },
       orderBy: {
         name: "asc",

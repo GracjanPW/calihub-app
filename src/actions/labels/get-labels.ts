@@ -1,2 +1,6 @@
 "use server";
-export { getLabels } from "@/lib/db/labels";
+import { getLabels as getLabelsLib } from "@/lib/db/labels";
+
+export async function getLabels() {
+  return getLabelsLib();
+}
