@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Boxes, Calendar, LucideWeight, Menu } from "lucide-react";
+import { Boxes, Calendar, LucideWeight, Menu, Tag } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -28,6 +28,11 @@ const nav_items = [
     label: "Schedule",
     href: "/schedule",
     Icon: Calendar,
+  },
+  {
+    label: "Labels",
+    href: "/labels",
+    Icon: Tag,
   },
 ];
 

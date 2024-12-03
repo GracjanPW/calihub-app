@@ -1,7 +1,5 @@
 "use client";
 import { addSchedule } from "@/actions/schedule/add-schedule";
-import { DatePicker } from "@/components/form/date-picker";
-import { FormError } from "@/components/form/form-error";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,12 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetExercises } from "@/hooks/use-get-exercies";
-import React, {
-  type ChangeEvent,
-  useEffect,
-  useState,
-  useTransition,
-} from "react";
+import React, { type ChangeEvent, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { AddScheduleSchema } from "@/schema/schedule.schema";
 import { z } from "zod";
@@ -267,10 +260,7 @@ export const AddScheduleForm = ({
         >
           Add set
         </Button>
-        <Button
-          className="w-full"
-          disabled={pending}
-        >
+        <Button className="w-full" disabled={pending}>
           Add workout
         </Button>
       </form>
