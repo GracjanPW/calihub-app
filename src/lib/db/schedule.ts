@@ -33,6 +33,16 @@ export async function getSchedule(
         exercise: {
           select: {
             name: true,
+            exerciseLabels:{
+              select:{
+                label:{
+                  select:{
+                    name:true,
+                    color:true
+                  }
+                }
+              }
+            }
           },
         },
         exerciseSets: {

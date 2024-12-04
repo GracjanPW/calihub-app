@@ -1,12 +1,21 @@
 "use client";
 import { deleteSchedule } from "@/actions/schedule/delete-schedule";
 import { Button } from "@/components/ui/button";
-import { Exercise, ExerciseSet, Schedule } from "@prisma/client";
+import {
+  Exercise,
+  ExerciseLabel,
+  ExerciseSet,
+  Label,
+  Schedule,
+} from "@prisma/client";
+import chroma from "chroma-js";
 import { Trash } from "lucide-react";
 
 interface ScheduleItemProps {
   data: Schedule & {
-    exercise: Pick<Exercise, "name">;
+    exercise: Pick<Exercise, "name"> & {
+      exerciseLabels: (ExerciseLabel & { label: Label })[];
+    };
     exerciseSets: Pick<ExerciseSet, "order" | "reps" | "weight" | "duration">[];
   };
 }
@@ -17,10 +26,21 @@ export const ScheduleItem = ({ data }: ScheduleItemProps) => {
   return (
     <div
       key={data.id}
-      className="bg-neutral-100 p-2 pl-4 rounded-md text-neutral-700 font-medium flex flex-col"
+      className="bg-neutral-100 p-2 pb-4 pl-4 rounded-md text-neutral-700 font-medium flex flex-col"
     >
       <div className="flex items-center justify-between">
-        {data.exercise.name}
+        <div className="flex items-center">
+          {data.exercise.name}
+          <div className="ml-1 flex space-x-1">
+            {data.exercise.exerciseLabels.map(({ label }) => (
+              <div
+                key={`${label.name}-${label.color}`}
+                style={{ backgroundColor: chroma(label.color).css() }}
+                className="size-2 rounded-full"
+              />
+            ))}
+          </div>
+        </div>
         <form>
           <Button
             variant={"ghost"}

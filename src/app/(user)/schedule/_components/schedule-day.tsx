@@ -2,16 +2,25 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Exercise, ExerciseSet, Schedule } from "@prisma/client";
+import {
+  Exercise,
+  ExerciseLabel,
+  ExerciseSet,
+  Label,
+  Schedule,
+} from "@prisma/client";
 import { format } from "date-fns";
 import { ChevronDown, Plus } from "lucide-react";
 import { useState } from "react";
 import { ScheduleItem } from "./schedule-item";
+import chroma from "chroma-js";
 
 interface ScheduleDayProps {
   date: Date;
   schedule: (Schedule & {
-    exercise: Pick<Exercise, "name">;
+    exercise: Pick<Exercise, "name"> & {
+      exerciseLabels: (ExerciseLabel & { label: Label })[];
+    };
     exerciseSets: Pick<ExerciseSet, "order" | "reps" | "weight" | "duration">[];
   })[];
   addSchedule: () => void;
@@ -52,9 +61,18 @@ export const ScheduleDay = ({
             <Badge
               key={schedule.id}
               variant={"outline"}
-              className="text-md text-neutral-700"
+              className="text-sm text-neutral-700"
             >
               {schedule.exercise.name}
+              <div className="ml-1 flex space-x-1">
+                {schedule.exercise.exerciseLabels.map(({ label }) => (
+                  <div
+                    key={`${label.name}-${label.color}`}
+                    style={{ backgroundColor: chroma(label.color).css() }}
+                    className="size-2 rounded-full"
+                  />
+                ))}
+              </div>
             </Badge>
           ))}
         {full &&

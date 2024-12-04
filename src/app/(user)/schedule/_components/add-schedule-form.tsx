@@ -90,13 +90,16 @@ export const AddScheduleForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
-          disabled={pending}
           control={form.control}
           name="exerciseId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Exercise</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                disabled={pending}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Exercise" />
@@ -116,7 +119,6 @@ export const AddScheduleForm = ({
         />
         <FormField
           control={form.control}
-          disabled={pending}
           name="date"
           render={({ field }) => {
             return (
@@ -125,6 +127,7 @@ export const AddScheduleForm = ({
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
+                      disabled={pending}
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
@@ -157,7 +160,6 @@ export const AddScheduleForm = ({
           {fieldArray.fields.map((field, idx) => (
             <li key={field.id} className="flex space-x-8 items-end">
               <FormField
-                disabled={pending}
                 control={form.control}
                 name={`sets.${idx}.sets`}
                 render={({ field }) => (
@@ -171,6 +173,7 @@ export const AddScheduleForm = ({
                         type="number"
                         min={1}
                         step={1}
+                        disabled={pending}
                       />
                     </FormControl>
                     <FormMessage />
@@ -179,7 +182,6 @@ export const AddScheduleForm = ({
               />
               {/* TODO: add further validation e.g max 2 decimal points, step of 0.01 */}
               <FormField
-                disabled={pending}
                 control={form.control}
                 name={`sets.${idx}.weight`}
                 render={({ field }) => (
@@ -191,13 +193,13 @@ export const AddScheduleForm = ({
                         onChange={(e) => handleNumberInput(e, field.onChange)}
                         type="number"
                         min={0}
+                        disabled={pending}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
               <FormField
-                disabled={pending}
                 control={form.control}
                 name={`sets.${idx}.reps`}
                 render={({ field }) => (
@@ -210,6 +212,7 @@ export const AddScheduleForm = ({
                         type="number"
                         onKeyDown={(e) => e.key === "." && e.preventDefault()}
                         min={0}
+                        disabled={pending}
                       />
                     </FormControl>
                   </FormItem>
@@ -229,6 +232,7 @@ export const AddScheduleForm = ({
                         type="number"
                         onKeyDown={(e) => e.key === "." && e.preventDefault()}
                         min={0}
+                        disabled={pending}
                       />
                     </FormControl>
                   </FormItem>
