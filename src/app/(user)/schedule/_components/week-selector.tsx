@@ -7,21 +7,20 @@ import {
   addDays,
   endOfWeek,
   format,
+  isWithinInterval,
   startOfWeek,
   subDays,
   toDate,
 } from "date-fns";
 import { usePathname, useRouter } from "next/navigation";
+import { cn, getDateRange } from "@/lib/utils";
 
 interface WeekSelectorProps {
   defaultFrom: string;
   defaultTo: string;
 }
 
-export const WeekSelector = ({
-  defaultFrom,
-  defaultTo,
-}: WeekSelectorProps) => {
+export const WeekSelector = ({ defaultFrom, defaultTo }: WeekSelectorProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [dateRange, setDateRange] = useState({
@@ -29,42 +28,25 @@ export const WeekSelector = ({
     to: defaultTo,
   });
 
-  const getDateRange = (date: Date) => {
-    const from = startOfWeek(date, {
-      weekStartsOn: 1,
-    }).toDateString();
-    const to = endOfWeek(date,{
-      weekStartsOn:1
-    }).toDateString();
-    return {
-      from,
-      to,
-    };
-  };
-
-  const setNewDateRange = useCallback(
-    (day: Date) => {
-      const { from, to } = getDateRange(day);
-      setDateRange({ to, from });
-      const params = new URLSearchParams({
-        from,
-        to,
-      });
-      router.push(pathname + "?" + params.toString());
-    },
-    [router, pathname]
-  );
-
   const nextWeek = () => {
     const next = addDays(dateRange.from, 7);
-    setNewDateRange(next);
+    const { from, to } = getDateRange(next);
+    setDateRange({ to, from });
   };
   const prevWeek = () => {
     const prev = subDays(dateRange.from, 7);
-    setNewDateRange(prev);
+    const { from, to } = getDateRange(prev);
+    setDateRange({ to, from });
   };
 
   const currentPeriod = useMemo(() => {
+    return isWithinInterval(new Date(), {
+      start: toDate(dateRange.from),
+      end: toDate(dateRange.to),
+    });
+  }, [dateRange]);
+
+  const dateRangeString = useMemo(() => {
     if (!dateRange.to || !dateRange.from) return "Loading";
     const fromDate = toDate(dateRange.from);
     const endDate = toDate(dateRange.to);
@@ -72,18 +54,29 @@ export const WeekSelector = ({
   }, [dateRange.from, dateRange.to]);
 
   useEffect(() => {
-    if (!dateRange.to || !dateRange.from) {
-      const today = new Date()
-      setNewDateRange(today);
-    }
-  }, [dateRange.from, dateRange.to, setNewDateRange]);
+    const setDateRangeSearchParams = setTimeout(() => {
+      const params = new URLSearchParams({
+        from: dateRange.from,
+        to: dateRange.to,
+      });
+      router.push(pathname + "?" + params.toString());
+    }, 500);
+    return () => clearTimeout(setDateRangeSearchParams);
+  }, [dateRange, pathname, router]);
 
   return (
     <div className="flex justify-between items-center border rounded-md">
       <Button variant={"ghost"} size={"icon"} onClick={prevWeek}>
-        <ChevronLeft/>
+        <ChevronLeft />
       </Button>
-      <p className="text-lg font-semibold">{currentPeriod}</p>
+      <p
+        className={cn(
+          "text-lg",
+          currentPeriod? "text-neutral-800 font-bold": "font-semibold"
+        )}
+      >
+        {currentPeriod?"This week":dateRangeString}
+      </p>
       <Button variant={"ghost"} size={"icon"} onClick={nextWeek}>
         <ChevronRight />
       </Button>

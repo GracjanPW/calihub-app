@@ -2,6 +2,7 @@ import { getSchedule } from "@/lib/db/schedule";
 import { PageHeader } from "../_components/page-header";
 import { WeekSelector } from "./_components/week-selector";
 import { ScheduleList } from "./_components/schedule-list";
+import { getDateRange } from "@/lib/utils";
 
 const SchedulePage = async ({
   searchParams,
@@ -11,7 +12,12 @@ const SchedulePage = async ({
     to: string;
   }>;
 }) => {
-  const { from, to } = await searchParams;
+  let { from, to } = await searchParams;
+  if (!from || !to) {
+    const { from: defaultFrom, to: defaultTo } = getDateRange(new Date());
+    from = defaultFrom;
+    to = defaultTo;
+  }
 
   const schedule = await getSchedule(from, to);
 
