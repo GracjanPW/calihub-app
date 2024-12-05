@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useGetLabels } from "@/hooks/use-get-labels";
 import { addExerciseSchema } from "@/schema/exercise.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 

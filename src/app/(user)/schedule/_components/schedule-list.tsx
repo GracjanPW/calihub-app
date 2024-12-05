@@ -9,24 +9,20 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import {
-  Exercise,
-  ExerciseLabel,
   ExerciseSet,
-  Label,
   Schedule,
 } from "@prisma/client";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { AddScheduleForm } from "./add-schedule-form";
 import { ScheduleDay } from "./schedule-day";
+import { ExerciseWithLabel } from "@/type";
 
 interface ScheduleListProps {
   data: {
     date: Date;
     schedule: (Schedule & {
-      exercise: Pick<Exercise, "name"> & {
-        exerciseLabels: (ExerciseLabel & { label: Label })[];
-      };
+      exercise: ExerciseWithLabel;
       exerciseSets: Pick<
         ExerciseSet,
         "order" | "reps" | "weight" | "duration"

@@ -2,7 +2,6 @@ import { deleteExercise } from "@/actions/exercises/delete-exercise";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExerciseWithLabel } from "@/type";
-import { Exercise, ExerciseLabel, Label } from "@prisma/client";
 import chroma from "chroma-js";
 import { Edit, Trash } from "lucide-react";
 

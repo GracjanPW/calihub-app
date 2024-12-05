@@ -31,29 +31,22 @@ export async function getSchedule(
       },
       include: {
         exercise: {
-          select: {
-            name: true,
-            exerciseLabels:{
-              select:{
-                label:{
-                  select:{
-                    name:true,
-                    color:true
-                  }
-                }
-              }
-            }
+          include: {
+            exerciseLabels: {
+              include: {
+                label: true,
+              },
+            },
           },
         },
         exerciseSets: {
-          select:{
-            weight:true,
-            order:true,
-            reps:true,
-            duration:true
-          }
-        }
-
+          select: {
+            weight: true,
+            order: true,
+            reps: true,
+            duration: true,
+          },
+        },
       },
     });
     const allDays = eachDayOfInterval({
