@@ -9,7 +9,6 @@ import { z } from "zod";
 
 export async function addExercise(values: z.infer<typeof addExerciseSchema>) {
   const user = await getUser();
-  console.log(user);
   if (!user || !user.id) throw new Error("Unauthorized");
 
   const { data } = addExerciseSchema.safeParse(values);

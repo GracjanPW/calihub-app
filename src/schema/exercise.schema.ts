@@ -12,3 +12,15 @@ export const addExerciseSchema = z.object({
     })
   ),
 });
+
+export const editExerciseSchema = z.object({
+  id:z.string(),
+  labels: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+      color: z.string(),
+    })
+  ),
+});
+

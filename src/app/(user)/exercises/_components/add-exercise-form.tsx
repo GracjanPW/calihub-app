@@ -29,15 +29,12 @@ export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
     },
   });
 
-  const successFn = useCallback(() => {
-    onSuccess();
-  }, [onSuccess]);
 
   const handleSubmit = (values: z.infer<typeof addExerciseSchema>) => {
     startTransition(() => {
       addExercise(values)
         .then(() => {
-          successFn();
+          onSuccess();
         })
         .catch((e) => {
           console.log(e);
