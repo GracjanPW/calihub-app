@@ -9,6 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        primary: "text-primary-foreground bg-gradient-to-tr from from-rose-400 via-rose-600 to-rose-800 shadow-sm shadow-neutral-200 hover:bg-opacity-90",
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",

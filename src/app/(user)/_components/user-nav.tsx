@@ -4,6 +4,7 @@ import { Boxes, Calendar, LucideWeight, Menu, Tag } from "lucide-react";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -56,6 +57,7 @@ export const UserNav = () => {
       <SheetContent side={"left"}>
         <SheetHeader>
           <SheetTitle className="text-2xl">Menu</SheetTitle>
+          <SheetDescription aria-describedby="Menu navigation" />
         </SheetHeader>
         <Separator className="my-2" />
         <div className="space-y-2">
