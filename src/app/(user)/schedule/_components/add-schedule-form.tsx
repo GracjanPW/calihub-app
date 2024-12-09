@@ -28,7 +28,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, TrashIcon } from "lucide-react";
+import { CalendarIcon, TrashIcon, Weight } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
@@ -67,9 +67,64 @@ export const AddScheduleForm = ({
     const value = e.currentTarget.value;
     if (value.length === 0) {
       return onChange("0");
+    } else if (!/^\d*$/.test(value)) {
+      return;
     }
     const number = Number(value);
     onChange(number.toString());
+  };
+
+  const handleWeightInput = (
+    e: ChangeEvent<HTMLInputElement>,
+    onChange: (num: string) => void
+  ) => {
+    const value = e.currentTarget.value;
+    if (value.length === 0) {
+      return onChange("0");
+    } else if (!/^[0-9]*\.?[0-9]{0,3}$/.test(value)) {
+      return;
+    }
+    const number = Number(value);
+    onChange(number.toString() + (value[value.length - 1] === "." ? "." : ""));
+  };
+
+  const handleTimeInput = (
+    e: ChangeEvent<HTMLInputElement>,
+    onChange: (num: string) => void
+  ) => {
+    const value = e.currentTarget.value;
+    let [hh, mm, ss]: string[] = value.split(":");
+    let temp = "";
+    if (ss.length > 2) {
+      if (hh.charAt(0) !=="0") return
+      temp = ss.charAt(0);
+      ss = ss.slice(1);
+      mm += temp;
+    } else if (ss.length < 2) {
+      temp = mm.charAt(1);
+      mm = mm.slice(0, -1);
+      ss = temp + ss;
+    }
+    if (mm.length > 2) {
+      if (hh.charAt(0) !=="0") return
+      temp = mm.charAt(0);
+      mm = mm.slice(1);
+      hh += temp;
+    } else if (mm.length < 2) {
+      temp = hh.charAt(1);
+      hh = hh.slice(0, -1);
+      mm = temp + mm;
+    }
+    if (hh.length > 2) {
+      if (hh.charAt(0) !=="0") return
+      temp = hh.charAt(0);
+      hh = hh.slice(1);
+    } else if (hh.length < 2) {
+      temp = "0";
+      hh = temp + hh;
+    }
+
+    onChange(`${hh}:${mm}:${ss}`);
   };
 
   const handleSubmit = (values: z.infer<typeof AddScheduleSchema>) => {
@@ -77,7 +132,7 @@ export const AddScheduleForm = ({
     startTransition(() => {
       addSchedule(values)
         .then(() => {
-          console.log("succes");
+          console.log("success");
           onSuccess?.();
         })
         .catch((e) => {
@@ -125,23 +180,26 @@ export const AddScheduleForm = ({
               <FormItem>
                 <FormLabel>Date</FormLabel>
                 <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      disabled={pending}
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon />
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
+                  <FormControl>
+                    <PopoverTrigger asChild>
+                      <Button
+                        type="button"
+                        disabled={pending}
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                  </FormControl>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
@@ -158,21 +216,22 @@ export const AddScheduleForm = ({
         {/* TODO: add order swap for sets */}
         <ul className="space-y-4">
           {fieldArray.fields.map((field, idx) => (
-            <li key={field.id} className="flex space-x-8 items-end">
+            <li
+              key={field.id}
+              className="flex space-x-2 justify-start items-end"
+            >
               <FormField
                 control={form.control}
                 name={`sets.${idx}.sets`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="!max-w-[40px]">
                     {idx === 0 && <FormLabel>Sets</FormLabel>}
                     <FormControl>
                       <Input
                         {...field}
                         onChange={(e) => handleNumberInput(e, field.onChange)}
                         onKeyDown={(e) => e.key === "." && e.preventDefault()}
-                        type="number"
-                        min={1}
-                        step={1}
+                        className="text-sm "
                         disabled={pending}
                       />
                     </FormControl>
@@ -180,20 +239,19 @@ export const AddScheduleForm = ({
                   </FormItem>
                 )}
               />
-              {/* TODO: add further validation e.g max 2 decimal points, step of 0.01 */}
+
               <FormField
                 control={form.control}
                 name={`sets.${idx}.weight`}
                 render={({ field }) => (
                   <FormItem>
-                    {idx === 0 && <FormLabel>Weight</FormLabel>}
+                    {idx === 0 && <FormLabel>W(kg)</FormLabel>}
                     <FormControl>
                       <Input
                         {...field}
-                        onChange={(e) => handleNumberInput(e, field.onChange)}
-                        type="number"
-                        min={0}
+                        onChange={(e) => handleWeightInput(e, field.onChange)}
                         disabled={pending}
+                        className="text-sm"
                       />
                     </FormControl>
                   </FormItem>
@@ -203,43 +261,43 @@ export const AddScheduleForm = ({
                 control={form.control}
                 name={`sets.${idx}.reps`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="!max-w-[50px]">
                     {idx === 0 && <FormLabel>Reps</FormLabel>}
                     <FormControl>
                       <Input
                         {...field}
                         onChange={(e) => handleNumberInput(e, field.onChange)}
-                        type="number"
                         onKeyDown={(e) => e.key === "." && e.preventDefault()}
-                        min={0}
                         disabled={pending}
+                        className="text-sm"
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
-              {/* TODO: implement a proper time input so user can enter hours minutes or seconds. currently only input in seconds */}
+ 
               <FormField
                 control={form.control}
                 name={`sets.${idx}.duration`}
                 render={({ field }) => (
-                  <FormItem>
-                    {idx === 0 && <FormLabel>Duration</FormLabel>}
+                  <FormItem className="!min-w-[90px]">
+                    {idx === 0 && <FormLabel>T(s)</FormLabel>}
                     <FormControl>
                       <Input
                         {...field}
-                        onChange={(e) => handleNumberInput(e, field.onChange)}
-                        type="number"
+                        onChange={(e) => handleTimeInput(e, field.onChange)}
                         onKeyDown={(e) => e.key === "." && e.preventDefault()}
                         min={0}
                         disabled={pending}
+                        className="text-sm"
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
               <Button
-                variant={"ghost"}
+                variant={"outline"}
+                className="w-auto aspect-square"
                 size={"icon"}
                 disabled={pending}
                 type="button"
@@ -258,7 +316,7 @@ export const AddScheduleForm = ({
               sets: "1",
               weight: "0",
               reps: "0",
-              duration: "0",
+              duration: "00:00:00",
             })
           }
         >

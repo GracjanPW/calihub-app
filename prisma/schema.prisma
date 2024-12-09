@@ -91,12 +91,15 @@ model Exercise {
 }
 
 model Schedule {
-  id           String        @id @default(uuid())
-  exerciseId   String
-  exercise     Exercise      @relation(references: [id], fields: [exerciseId], onDelete: Cascade)
-  date         DateTime
-  userId       String
+  id         String @id @default(uuid())
+  exerciseId String
+  userId     String
+
+  date  DateTime @db.Date
+  order Int
+
   user         User          @relation(references: [id], fields: [userId], onDelete: Cascade)
+  exercise     Exercise      @relation(references: [id], fields: [exerciseId], onDelete: Cascade)
   exerciseSets ExerciseSet[]
 }
 
@@ -131,8 +134,8 @@ model ExerciseLabel {
 
 model Label {
   id             String          @id @default(uuid())
-  name           String          
-  color          String         
+  name           String
+  color          String
   userId         String
   user           User            @relation(references: [id], fields: [userId], onDelete: Cascade)
   exerciseLabels ExerciseLabel[]

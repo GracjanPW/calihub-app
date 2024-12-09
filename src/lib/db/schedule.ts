@@ -51,7 +51,13 @@ export async function getScheduleByDate(
         exerciseSets: true,
       },
     });
-    return schedules;
+    return schedules.map((schedule)=> ({
+      ...schedule,
+      exerciseSets:schedule.exerciseSets.map((set)=>({
+        ...set,
+        weight:set.weight/1000
+      }))
+    }) )
   } catch {
     return [];
   }
@@ -122,7 +128,13 @@ export async function getSchedule(
         };
       return {
         date: day,
-        schedule: foundSchedules,
+        schedule: foundSchedules.map((schedule)=> ({
+          ...schedule,
+          exerciseSets:schedule.exerciseSets.map((set)=>({
+            ...set,
+            weight:set.weight/1000
+          }))
+        }) ),
       };
     });
 

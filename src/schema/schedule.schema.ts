@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const refineIsNumber = (v:string) => !isNaN(Number(v))
-
+const refineIsTimeString = (v:string) => /^\d{2}:\d{2}:\d{2}$/.test(v)
 
 export const AddScheduleSchema = z.object({
   exerciseId: z.string().min(1, {
@@ -27,14 +27,15 @@ export const AddScheduleSchema = z.object({
           { message: "Invalid number" }
         ),
         duration: z.string().refine(
-          refineIsNumber,
+          refineIsTimeString,
           { message: "Invalid number" }
         ),
       })
       .refine((v) => {
         const w = Number(v.weight);
         const r = Number(v.reps);
-        const d = Number(v.duration);
+        const[hh,mm,ss] = v.duration.split(":")
+        const d = Number(hh) + Number(mm) + Number(ss)
 
         if (w > 0 || r > 0 || d>0) return true
       },

@@ -38,8 +38,13 @@ export async function addSchedule(values: z.infer<typeof AddScheduleSchema>) {
   const dbReadyData = {
     ...data,
     sets: separateSets(data.sets).map((set, i) => {
-      const weight = Number(set.weight);
-      const duration = Number(set.duration);
+      const weight = Math.floor(Number(set.weight) *1000);
+      const [hh,mm,ss] = set.duration.split(':');
+      const secondsInHH = Number(hh)*60*60
+      const secondsInMM = Number(mm)*60
+      const seconds = Number(ss)
+      const duration = secondsInHH + secondsInMM + seconds
+
       const reps = Number(set.reps)
       const order = i;
       const exerciseId = data.exerciseId;
@@ -61,11 +66,22 @@ export async function addSchedule(values: z.infer<typeof AddScheduleSchema>) {
   });
   if (!existingExercise) throw new Error("Exercise doesn't exist");
 
+  const lastSchedule = await db.schedule.findFirst({
+    where:{
+      userId:user.id,
+      date: dbReadyData.date
+    },
+    orderBy:{
+      order:"desc"
+    }
+  })
+
   const schedule = await db.schedule.create({
     data: {
       userId: user.id,
       exerciseId: dbReadyData.exerciseId,
       date: dbReadyData.date,
+      order: lastSchedule? lastSchedule.order+1:0,
       exerciseSets: {
         createMany: {
           data: dbReadyData.sets,
