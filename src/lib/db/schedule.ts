@@ -11,10 +11,10 @@ import {
   isSameDay,
   startOfDay,
   toDate,
-} from "date-fns";
-import { getUser } from "../auth/get-user";
-import { db } from "../db";
-import { SchedulePopulated } from "@/type";
+} from 'date-fns';
+import { getUser } from '../auth/get-user';
+import { db } from '../db';
+import { SchedulePopulated } from '@/type';
 
 export async function getScheduleByDate(
   day: string
@@ -51,13 +51,13 @@ export async function getScheduleByDate(
         exerciseSets: true,
       },
     });
-    return schedules.map((schedule)=> ({
+    return schedules.map((schedule) => ({
       ...schedule,
-      exerciseSets:schedule.exerciseSets.map((set)=>({
+      exerciseSets: schedule.exerciseSets.map((set) => ({
         ...set,
-        weight:set.weight/1000
-      }))
-    }) )
+        weight: set.weight / 1000,
+      })),
+    }));
   } catch {
     return [];
   }
@@ -128,13 +128,13 @@ export async function getSchedule(
         };
       return {
         date: day,
-        schedule: foundSchedules.map((schedule)=> ({
+        schedule: foundSchedules.map((schedule) => ({
           ...schedule,
-          exerciseSets:schedule.exerciseSets.map((set)=>({
+          exerciseSets: schedule.exerciseSets.map((set) => ({
             ...set,
-            weight:set.weight/1000
-          }))
-        }) ),
+            weight: set.weight / 1000,
+          })),
+        })),
       };
     });
 

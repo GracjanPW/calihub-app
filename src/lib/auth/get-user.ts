@@ -1,10 +1,10 @@
-import { auth } from "../auth"
+import { auth } from '../auth';
 
 export async function getUser() {
-    try {
-      const session = await auth();
-      return session?.user
-    } catch {
-      return null
-    }
+  try {
+    const session = await auth();
+    return session?.user;
+  } catch {
+    return null;
+  }
 }

@@ -4,7 +4,7 @@ import {
   ExerciseSet,
   Label,
   Schedule,
-} from "@prisma/client";
+} from '@prisma/client';
 
 export type ExerciseWithLabel = Exercise & {
   exerciseLabels: (ExerciseLabel & { label: Label })[];

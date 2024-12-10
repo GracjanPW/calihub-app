@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Drawer,
   DrawerClose,
@@ -6,10 +6,10 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { ExerciseWithLabel } from "@/type";
-import { EditExerciseForm } from "./edit-exercise-form";
+} from '@/components/ui/drawer';
+import { Button } from '@/components/ui/button';
+import { ExerciseWithLabel } from '@/type';
+import { EditExerciseForm } from './edit-exercise-form';
 
 interface EditExerciseDrawerProps {
   open: boolean;
@@ -25,15 +25,15 @@ export const EditExerciseDrawer = ({
   return (
     <Drawer open={open} onOpenChange={close}>
       <DrawerContent>
-        <DrawerHeader className="text-left">
+        <DrawerHeader className='text-left'>
           <DrawerTitle>Exercise</DrawerTitle>
         </DrawerHeader>
-        <div className="px-4 mb-2">
+        <div className='mb-2 px-4'>
           {data && <EditExerciseForm defaultValues={data} onSuccess={close} />}
         </div>
-        <DrawerFooter className="pt-2">
+        <DrawerFooter className='pt-2'>
           <DrawerClose asChild>
-            <Button variant="outline" onClick={close}>
+            <Button variant='outline' onClick={close}>
               Cancel
             </Button>
           </DrawerClose>

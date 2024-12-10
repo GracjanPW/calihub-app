@@ -1,18 +1,18 @@
-"use server";
+'use server';
 
-import { getUser } from "@/lib/auth/get-user";
-import { db } from "@/lib/db";
-import { addLabelSchema } from "@/schema/label.schema";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { getUser } from '@/lib/auth/get-user';
+import { db } from '@/lib/db';
+import { addLabelSchema } from '@/schema/label.schema';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 export async function addLabel(values: z.infer<typeof addLabelSchema>) {
   const user = await getUser();
-  if (!user || !user.id) throw new Error("Unauthorized");
+  if (!user || !user.id) throw new Error('Unauthorized');
 
   const { data } = addLabelSchema.safeParse(values);
 
-  if (!data) throw new Error("Invalid input types");
+  if (!data) throw new Error('Invalid input types');
 
   const existingExercise = await db.label.findFirst({
     where: {
@@ -21,7 +21,7 @@ export async function addLabel(values: z.infer<typeof addLabelSchema>) {
     },
   });
 
-  if (existingExercise) throw new Error("Label with this name already exists");
+  if (existingExercise) throw new Error('Label with this name already exists');
 
   const newLabel = await db.label.create({
     data: {
@@ -30,9 +30,9 @@ export async function addLabel(values: z.infer<typeof addLabelSchema>) {
     },
   });
 
-  if (!newLabel) throw new Error("Something went wrong");
+  if (!newLabel) throw new Error('Something went wrong');
 
-  revalidatePath("/labels");
+  revalidatePath('/labels');
 
   return newLabel;
 }

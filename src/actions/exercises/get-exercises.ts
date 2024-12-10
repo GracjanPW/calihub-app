@@ -1,7 +1,7 @@
-"use server"
+'use server';
 
-import { getAllExercises } from "@/lib/db/exercise"
+import { getAllExercises } from '@/lib/db/exercise';
 
 export async function getExercises() {
-  return await getAllExercises()
+  return await getAllExercises();
 }

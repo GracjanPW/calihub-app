@@ -1,19 +1,19 @@
-"use server"
+'use server';
 
-import { getUser } from "@/lib/auth/get-user"
-import { db } from "@/lib/db"
-import { revalidatePath } from "next/cache"
+import { getUser } from '@/lib/auth/get-user';
+import { db } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 
-export async function deleteLabel(id:string) {
-  const user = await getUser()
-  if (!user) throw new Error("Unauthorized")
+export async function deleteLabel(id: string) {
+  const user = await getUser();
+  if (!user) throw new Error('Unauthorized');
 
   await db.label.delete({
-    where:{
+    where: {
       id,
-      userId:user.id
-    }
-  })
+      userId: user.id,
+    },
+  });
 
-  revalidatePath("/labels")
+  revalidatePath('/labels');
 }

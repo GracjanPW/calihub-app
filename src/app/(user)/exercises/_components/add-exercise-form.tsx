@@ -1,7 +1,7 @@
-"use client";
-import { addExercise } from "@/actions/exercises/add-exercise";
-import { LabelSelector } from "@/components/form/label-select";
-import { Button } from "@/components/ui/button";
+'use client';
+import { addExercise } from '@/actions/exercises/add-exercise';
+import { LabelSelector } from '@/components/form/label-select';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -9,14 +9,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useGetLabels } from "@/hooks/use-get-labels";
-import { addExerciseSchema } from "@/schema/exercise.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { useGetLabels } from '@/hooks/use-get-labels';
+import { addExerciseSchema } from '@/schema/exercise.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const [pending, startTransition] = useTransition();
@@ -24,11 +24,10 @@ export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const form = useForm<z.infer<typeof addExerciseSchema>>({
     resolver: zodResolver(addExerciseSchema),
     defaultValues: {
-      name: "",
+      name: '',
       labels: [],
     },
   });
-
 
   const handleSubmit = (values: z.infer<typeof addExerciseSchema>) => {
     startTransition(() => {
@@ -44,10 +43,10 @@ export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
         <FormField
           control={form.control}
-          name="name"
+          name='name'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
@@ -60,7 +59,7 @@ export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
         />
         <FormField
           control={form.control}
-          name="labels"
+          name='labels'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Labels</FormLabel>
@@ -76,7 +75,7 @@ export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
                     label: label.name,
                     color: label.color,
                   }))}
-                  loaded={status === "success"}
+                  loaded={status === 'success'}
                 />
               </FormControl>
               <FormMessage />
@@ -84,7 +83,7 @@ export const AddExerciseForm = ({ onSuccess }: { onSuccess: () => void }) => {
           )}
         />
 
-        <Button className="w-full" disabled={pending}>
+        <Button className='w-full' disabled={pending}>
           Create
         </Button>
       </form>

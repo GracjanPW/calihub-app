@@ -1,8 +1,8 @@
-import { getSchedule } from "@/lib/db/schedule";
-import { PageHeader } from "../_components/page-header";
-import { WeekSelector } from "./_components/week-selector";
-import { ScheduleList } from "./_components/schedule-list";
-import { getDateRange } from "@/lib/utils";
+import { getSchedule } from '@/lib/db/schedule';
+import { PageHeader } from '../_components/page-header';
+import { WeekSelector } from './_components/week-selector';
+import { ScheduleList } from './_components/schedule-list';
+import { getDateRange } from '@/lib/utils';
 
 const SchedulePage = async ({
   searchParams,
@@ -22,9 +22,9 @@ const SchedulePage = async ({
   const schedule = await getSchedule(from, to);
 
   return (
-    <div className="relative px-6 space-y-4 flex-1 pb-4 flex flex-col justify-start">
+    <div className='relative flex flex-1 flex-col justify-start space-y-4 px-6 pb-4'>
       <PageHeader>
-        <h1 className="text-2xl font-semibold tracking-wider text-neutral-100">
+        <h1 className='text-2xl font-semibold tracking-wider text-neutral-100'>
           Schedule
         </h1>
       </PageHeader>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Form,
@@ -7,17 +7,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
-import { editExerciseSchema } from "@/schema/exercise.schema";
-import { ExerciseWithLabel } from "@/type";
-import { useGetLabels } from "@/hooks/use-get-labels";
-import { LabelSelector } from "@/components/form/label-select";
-import { editExercise } from "@/actions/exercises/edit-exercise";
+} from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, useWatch } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { useTransition } from 'react';
+import { editExerciseSchema } from '@/schema/exercise.schema';
+import { ExerciseWithLabel } from '@/type';
+import { useGetLabels } from '@/hooks/use-get-labels';
+import { LabelSelector } from '@/components/form/label-select';
+import { editExercise } from '@/actions/exercises/edit-exercise';
 
 interface EditExerciseFormProps {
   defaultValues: ExerciseWithLabel;
@@ -79,21 +79,21 @@ export const EditExerciseForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="name" className="font-semibold text-sm">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
+        <div className='space-y-2'>
+          <label htmlFor='name' className='text-sm font-semibold'>
             Name
           </label>
           <div
-            id="name"
-            className="w-full rounded-md border border-neutral-300 pl-3 p-2"
+            id='name'
+            className='w-full rounded-md border border-neutral-300 p-2 pl-3'
           >
             {defaultValues.name}
           </div>
         </div>
         <FormField
           control={form.control}
-          name="labels"
+          name='labels'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Labels</FormLabel>
@@ -110,7 +110,7 @@ export const EditExerciseForm = ({
                     label: label.name,
                     color: label.color,
                   }))}
-                  loaded={status === "success"}
+                  loaded={status === 'success'}
                 />
               </FormControl>
               <FormMessage />
@@ -118,7 +118,7 @@ export const EditExerciseForm = ({
           )}
         />
 
-        <Button className="w-full" disabled={pending || !hasChanges}>
+        <Button className='w-full' disabled={pending || !hasChanges}>
           Save changes
         </Button>
       </form>

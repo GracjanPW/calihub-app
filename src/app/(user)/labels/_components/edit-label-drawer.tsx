@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Drawer,
   DrawerClose,
@@ -7,10 +7,10 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer";
-import { Label } from "@prisma/client";
-import { Button } from "@/components/ui/button";
-import { EditLabelForm } from "./edit-label-form";
+} from '@/components/ui/drawer';
+import { Label } from '@prisma/client';
+import { Button } from '@/components/ui/button';
+import { EditLabelForm } from './edit-label-form';
 
 interface EditLabelDrawerProps {
   open: boolean;
@@ -26,19 +26,19 @@ export const EditLabelDrawer = ({
   return (
     <Drawer open={open} onOpenChange={setClose}>
       <DrawerContent>
-        <DrawerHeader className="text-left">
+        <DrawerHeader className='text-left'>
           <DrawerTitle>label</DrawerTitle>
           <DrawerDescription>
             Create new label here, these can be used to categorize your
             exercises
           </DrawerDescription>
         </DrawerHeader>
-        <div className="px-4 mb-2">
+        <div className='mb-2 px-4'>
           {data && <EditLabelForm defaultValues={data} onSuccess={setClose} />}
         </div>
-        <DrawerFooter className="pt-2">
+        <DrawerFooter className='pt-2'>
           <DrawerClose asChild>
-            <Button variant="outline" onClick={setClose}>
+            <Button variant='outline' onClick={setClose}>
               Cancel
             </Button>
           </DrawerClose>

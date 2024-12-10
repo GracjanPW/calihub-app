@@ -1,5 +1,5 @@
-import { PasswordResetToken } from "@prisma/client";
-import { db } from "../db";
+import { PasswordResetToken } from '@prisma/client';
+import { db } from '../db';
 
 /**
  * @function getPasswordResetTokenByEmail

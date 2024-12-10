@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerContent,
@@ -7,16 +7,13 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer";
-import {
-  ExerciseSet,
-  Schedule,
-} from "@prisma/client";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useState } from "react";
-import { AddScheduleForm } from "./add-schedule-form";
-import { ScheduleDay } from "./schedule-day";
-import { ExerciseWithLabel } from "@/type";
+} from '@/components/ui/drawer';
+import { ExerciseSet, Schedule } from '@prisma/client';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { useState } from 'react';
+import { AddScheduleForm } from './add-schedule-form';
+import { ScheduleDay } from './schedule-day';
+import { ExerciseWithLabel } from '@/type';
 
 interface ScheduleListProps {
   data: {
@@ -25,7 +22,7 @@ interface ScheduleListProps {
       exercise: ExerciseWithLabel;
       exerciseSets: Pick<
         ExerciseSet,
-        "order" | "reps" | "weight" | "duration"
+        'order' | 'reps' | 'weight' | 'duration'
       >[];
     })[];
   }[];
@@ -41,11 +38,11 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
   };
 
   if (data.length === 0)
-    return <div className="flex-1">Problem retrieving schedule</div>;
+    return <div className='flex-1'>Problem retrieving schedule</div>;
   return (
     <>
-      <div className="flex flex-col flex-1 overflow-y-auto">
-        <div className="max-h-0 space-y-6">
+      <div className='flex flex-1 flex-col overflow-y-auto'>
+        <div className='max-h-0 space-y-6'>
           {data.map((day) => (
             <ScheduleDay
               key={day.date.toDateString()}
@@ -65,7 +62,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
               change this later
             </DrawerDescription>
           </DrawerHeader>
-          <div className="px-4">
+          <div className='px-4'>
             <AddScheduleForm
               defaultValues={{ date: defaultDate }}
               onSuccess={() => setOpenAdd(false)}
@@ -73,7 +70,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
           </div>
           <DrawerFooter>
             <DialogClose asChild>
-              <Button variant={"outline"}>Cancel</Button>
+              <Button variant={'outline'}>Cancel</Button>
             </DialogClose>
           </DrawerFooter>
         </DrawerContent>

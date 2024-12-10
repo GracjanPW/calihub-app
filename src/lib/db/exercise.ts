@@ -1,5 +1,5 @@
-import { getUser } from "../auth/get-user";
-import { db } from "../db";
+import { getUser } from '../auth/get-user';
+import { db } from '../db';
 
 /**
  * @function getAllExercises
@@ -22,7 +22,7 @@ export async function getAllExercises() {
         },
       },
       orderBy: {
-        name: "asc",
+        name: 'asc',
       },
     });
     return exercises;

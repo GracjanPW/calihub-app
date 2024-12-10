@@ -1,19 +1,19 @@
-"use server";
+'use server';
 
-import { getUser } from "@/lib/auth/get-user";
-import { db } from "@/lib/db";
-import { addExerciseSchema } from "@/schema/exercise.schema";
-import { Label } from "@prisma/client";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { getUser } from '@/lib/auth/get-user';
+import { db } from '@/lib/db';
+import { addExerciseSchema } from '@/schema/exercise.schema';
+import { Label } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 export async function addExercise(values: z.infer<typeof addExerciseSchema>) {
   const user = await getUser();
-  if (!user || !user.id) throw new Error("Unauthorized");
+  if (!user || !user.id) throw new Error('Unauthorized');
 
   const { data } = addExerciseSchema.safeParse(values);
 
-  if (!data) throw new Error("Invalid fields");
+  if (!data) throw new Error('Invalid fields');
 
   let labels: Label[] = [];
   if (data.labels.length > 0) {
@@ -27,7 +27,7 @@ export async function addExercise(values: z.infer<typeof addExerciseSchema>) {
         },
       },
     });
-    if (!labels) throw new Error("Labels dont exist");
+    if (!labels) throw new Error('Labels dont exist');
   }
 
   const exercise = await db.exercise.create({
@@ -42,8 +42,8 @@ export async function addExercise(values: z.infer<typeof addExerciseSchema>) {
     },
   });
 
-  if (!exercise) throw new Error("Failed to create exercise");
+  if (!exercise) throw new Error('Failed to create exercise');
 
-  revalidatePath("/exercises");
+  revalidatePath('/exercises');
   return exercise;
 }

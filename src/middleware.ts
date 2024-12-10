@@ -1,12 +1,12 @@
-import { authConfig } from "@/lib/auth.config";
-import NextAuth from "next-auth";
+import { authConfig } from '@/lib/auth.config';
+import NextAuth from 'next-auth';
 import {
   AUTH_API_PREFIX,
   AUTH_ROUTES,
   DEFAULT_AUTH_PAGE,
   DEFAULT_AUTH_REDIRECT,
   PUBLIC_ROUTES,
-} from "./routes";
+} from './routes';
 
 const { auth } = NextAuth(authConfig);
 
@@ -29,8 +29,8 @@ export default auth(async (req) => {
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
-    "/(api|trpc)(.*)",
+    '/(api|trpc)(.*)',
   ],
 };

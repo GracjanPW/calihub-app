@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const addExerciseSchema = z.object({
   name: z.string().min(1, {
-    message: "Name is required",
+    message: 'Name is required',
   }),
   labels: z.array(
     z.object({
@@ -14,7 +14,7 @@ export const addExerciseSchema = z.object({
 });
 
 export const editExerciseSchema = z.object({
-  id:z.string(),
+  id: z.string(),
   labels: z.array(
     z.object({
       value: z.string(),
@@ -23,4 +23,3 @@ export const editExerciseSchema = z.object({
     })
   ),
 });
-

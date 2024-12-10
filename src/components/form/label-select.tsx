@@ -1,7 +1,7 @@
-import React, { forwardRef } from "react";
-import chroma from "chroma-js";
+import React, { forwardRef } from 'react';
+import chroma from 'chroma-js';
 
-import Select, { StylesConfig } from "react-select";
+import Select, { StylesConfig } from 'react-select';
 
 type LabelOption = {
   label: string;
@@ -12,9 +12,9 @@ type LabelOption = {
 const colourStyles: StylesConfig<LabelOption, true> = {
   control: (styles) => ({
     ...styles,
-    backgroundColor: "white",
-    border: "solid 1px hsl(var(--input))",
-    borderRadius: "calc(var(--radius) - 2px);",
+    backgroundColor: 'white',
+    border: 'solid 1px hsl(var(--input))',
+    borderRadius: 'calc(var(--radius) - 2px);',
   }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
     const color = chroma(data.color);
@@ -23,21 +23,21 @@ const colourStyles: StylesConfig<LabelOption, true> = {
       backgroundColor: isDisabled
         ? undefined
         : isSelected
-        ? data.color
-        : isFocused
-        ? color.alpha(0.1).css()
-        : undefined,
+          ? data.color
+          : isFocused
+            ? color.alpha(0.1).css()
+            : undefined,
       color: isDisabled
-        ? "#ccc"
+        ? '#ccc'
         : isSelected
-        ? chroma.contrast(color, "white") > 2
-          ? "white"
-          : "black"
-        : data.color,
-      cursor: isDisabled ? "not-allowed" : "default",
+          ? chroma.contrast(color, 'white') > 2
+            ? 'white'
+            : 'black'
+          : data.color,
+      cursor: isDisabled ? 'not-allowed' : 'default',
 
-      ":active": {
-        ...styles[":active"],
+      ':active': {
+        ...styles[':active'],
         backgroundColor: !isDisabled
           ? isSelected
             ? data.color
@@ -60,9 +60,9 @@ const colourStyles: StylesConfig<LabelOption, true> = {
   multiValueRemove: (styles, { data }) => ({
     ...styles,
     color: data.color,
-    ":hover": {
+    ':hover': {
       backgroundColor: data.color,
-      color: "white",
+      color: 'white',
     },
   }),
 };
@@ -101,7 +101,7 @@ export const LabelSelector = forwardRef(
         defaultValue={defaultValue}
         onChange={onChange}
         isMulti
-        menuPlacement="top"
+        menuPlacement='top'
         options={options}
         styles={colourStyles}
         isLoading={!loaded}
@@ -110,4 +110,4 @@ export const LabelSelector = forwardRef(
   }
 );
 
-LabelSelector.displayName = "LabelSelector";
+LabelSelector.displayName = 'LabelSelector';

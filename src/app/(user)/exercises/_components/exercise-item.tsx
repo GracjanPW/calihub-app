@@ -1,9 +1,9 @@
-import { deleteExercise } from "@/actions/exercises/delete-exercise";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ExerciseWithLabel } from "@/type";
-import chroma from "chroma-js";
-import { Edit, Trash } from "lucide-react";
+import { deleteExercise } from '@/actions/exercises/delete-exercise';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ExerciseWithLabel } from '@/type';
+import chroma from 'chroma-js';
+import { Edit, Trash } from 'lucide-react';
 
 interface ExerciseItemProps {
   data: ExerciseWithLabel;
@@ -13,17 +13,17 @@ interface ExerciseItemProps {
 export const ExerciseItem = ({ data, onClick }: ExerciseItemProps) => {
   const deleteExerciseWithId = deleteExercise.bind(null, data.id);
   return (
-    <div className="bg-neutral-100  pl-4 p-2 rounded-md ">
-      <div className="flex items-center">
-        <p className="text-neutral-600 text-lg font-semibold">{data.name}</p>
-        <div className="ml-auto flex">
-          <Button variant={"ghost"} size={"icon"} onClick={onClick}>
-            <Edit className="" />
+    <div className='rounded-md bg-neutral-100 p-2 pl-4'>
+      <div className='flex items-center'>
+        <p className='text-lg font-semibold text-neutral-600'>{data.name}</p>
+        <div className='ml-auto flex'>
+          <Button variant={'ghost'} size={'icon'} onClick={onClick}>
+            <Edit className='' />
           </Button>
           <form>
             <Button
-              variant={"ghost"}
-              size={"icon"}
+              variant={'ghost'}
+              size={'icon'}
               formAction={deleteExerciseWithId}
             >
               <Trash />
@@ -31,7 +31,7 @@ export const ExerciseItem = ({ data, onClick }: ExerciseItemProps) => {
           </form>
         </div>
       </div>
-      <div className="items-center space-x-2 space-y-2 w-full">
+      <div className='w-full items-center space-x-2 space-y-2'>
         {data.exerciseLabels.map(({ label }) => (
           <Badge
             key={label.id}

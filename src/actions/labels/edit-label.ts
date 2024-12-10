@@ -1,18 +1,18 @@
-"use server";
+'use server';
 
-import { getUser } from "@/lib/auth/get-user";
-import { db } from "@/lib/db";
-import { editLabelSchema } from "@/schema/label.schema";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { getUser } from '@/lib/auth/get-user';
+import { db } from '@/lib/db';
+import { editLabelSchema } from '@/schema/label.schema';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 export async function editLabel(values: z.infer<typeof editLabelSchema>) {
   const user = await getUser();
-  if (!user || !user.id) throw new Error("Unauthorized");
+  if (!user || !user.id) throw new Error('Unauthorized');
 
   const parsedData = editLabelSchema.safeParse(values);
 
-  if (!parsedData.success) throw new Error("Invalid input types");
+  if (!parsedData.success) throw new Error('Invalid input types');
 
   const { data } = parsedData;
 
@@ -23,7 +23,7 @@ export async function editLabel(values: z.infer<typeof editLabelSchema>) {
     },
   });
 
-  if (!existingLabel) throw new Error("Label not found");
+  if (!existingLabel) throw new Error('Label not found');
 
   const { name, color } = data;
 
@@ -38,9 +38,9 @@ export async function editLabel(values: z.infer<typeof editLabelSchema>) {
     },
   });
 
-  if (!updatedLabel) throw new Error("Something went wrong");
+  if (!updatedLabel) throw new Error('Something went wrong');
 
-  revalidatePath("/labels");
+  revalidatePath('/labels');
 
   return updatedLabel;
 }
