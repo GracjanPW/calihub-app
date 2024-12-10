@@ -8,6 +8,7 @@
 import {
   eachDayOfInterval,
   endOfDay,
+  format,
   isSameDay,
   startOfDay,
   toDate,
@@ -23,20 +24,13 @@ export async function getScheduleByDate(
   if (!user) return [];
   if (!day) return [];
 
-  const dateOfDay = toDate(day);
+  const dateOfDay = format(toDate(day), 'yyyy-MM-dd');
 
-  const start = startOfDay(dateOfDay);
-  const end = endOfDay(dateOfDay);
-
-  if (!(dateOfDay instanceof Date)) return [];
   try {
     const schedules = await db.schedule.findMany({
       where: {
         userId: user.id,
-        date: {
-          gte: start,
-          lt: end,
-        },
+        date: new Date(dateOfDay),
       },
       include: {
         exercise: {

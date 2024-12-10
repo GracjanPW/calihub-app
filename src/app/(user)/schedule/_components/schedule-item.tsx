@@ -1,6 +1,7 @@
 'use client';
 import { deleteSchedule } from '@/actions/schedule/delete-schedule';
 import { Button } from '@/components/ui/button';
+import { formatSecondsToHHMMSS } from '@/lib/utils';
 import {
   Exercise,
   ExerciseLabel,
@@ -67,9 +68,7 @@ export const ScheduleItem = ({ data }: ScheduleItemProps) => {
               {Number(set.duration) > 0
                 ? (Number(set.reps) > 0 || Number(set.weight) > 0
                     ? 'for '
-                    : '') +
-                  set.duration +
-                  's'
+                    : '') + formatSecondsToHHMMSS(Number(set.duration))
                 : null}
             </li>
           ))}
