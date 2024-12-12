@@ -114,6 +114,8 @@ model ExerciseSet {
   rpe               Int?
   order             Int
 
+  completed Boolean @default(false)
+  
   exerciseId String
   exercise   Exercise @relation(references: [id], fields: [exerciseId], onDelete: Cascade)
 
