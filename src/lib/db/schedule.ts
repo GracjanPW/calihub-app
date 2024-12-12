@@ -7,10 +7,8 @@
 
 import {
   eachDayOfInterval,
-  endOfDay,
   format,
   isSameDay,
-  startOfDay,
   toDate,
 } from 'date-fns';
 import { getUser } from '../auth/get-user';
@@ -96,14 +94,7 @@ export async function getSchedule(
             },
           },
         },
-        exerciseSets: {
-          select: {
-            weight: true,
-            order: true,
-            reps: true,
-            duration: true,
-          },
-        },
+        exerciseSets: true,
       },
     });
     const allDays = eachDayOfInterval({

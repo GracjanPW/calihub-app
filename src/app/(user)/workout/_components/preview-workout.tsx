@@ -27,7 +27,7 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
               </div>
             </div>
             <Separator />
-            <div className='p-2 space-y-2'>
+            <div className='space-y-2 p-2'>
               {schedule.exerciseSets.map((set) => (
                 <div key={set.id} className='flex justify-between'>
                   <p className='leading-6 text-muted-foreground'>
@@ -45,16 +45,15 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
                         set.duration +
                         's'
                       : null}
-
                   </p>
-                    <div className='flex space-x-2'>
-                      <Button variant={'ghost'} size={'iconSm'}>
-                        <Edit className='size-2'/>
-                      </Button>
-                      <Button variant={'ghost'} size={'iconSm'}>
-                       <Check/>
-                      </Button>
-                    </div>
+                  <div className='flex space-x-2'>
+                    <Button variant={'ghost'} size={'iconSm'}>
+                      <Edit className='size-2' />
+                    </Button>
+                    <Button variant={'ghost'} size={'iconSm'}>
+                      <Check />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>

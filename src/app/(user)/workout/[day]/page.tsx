@@ -18,7 +18,7 @@ const WorkoutDayPage = async ({
           {label} Workout
         </h1>
       </PageHeader>
-      <PreviewWorkout data={todaysWorkout}/>
+      <PreviewWorkout data={todaysWorkout} />
     </div>
   );
 };

@@ -24,12 +24,14 @@ interface ScheduleDayProps {
     exerciseSets: Pick<ExerciseSet, 'order' | 'reps' | 'weight' | 'duration'>[];
   })[];
   addSchedule: () => void;
+  editSchedule: (id: string) => void;
 }
 
 export const ScheduleDay = ({
   date,
   schedule,
   addSchedule,
+  editSchedule,
 }: ScheduleDayProps) => {
   const [full, setFull] = useState(false);
   return (
@@ -77,7 +79,11 @@ export const ScheduleDay = ({
           ))}
         {full &&
           schedule.map((schedule) => (
-            <ScheduleItem key={schedule.id} data={schedule} />
+            <ScheduleItem
+              key={schedule.id}
+              data={schedule}
+              edit={() => editSchedule(schedule.id)}
+            />
           ))}
       </div>
     </div>

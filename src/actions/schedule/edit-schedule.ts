@@ -3,17 +3,27 @@
 import { getUser } from '@/lib/auth/get-user';
 import { db } from '@/lib/db';
 import { separateSets } from '@/lib/utils';
-import { AddScheduleSchema } from '@/schema/schedule.schema';
+import { EditScheduleSchema } from '@/schema/schedule.schema';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-export async function addSchedule(values: z.infer<typeof AddScheduleSchema>) {
+export async function editSchedule(values: z.infer<typeof EditScheduleSchema>) {
   const user = await getUser();
   if (!user || !user.id) throw new Error('Unauthorized');
 
-  const { data } = AddScheduleSchema.safeParse(values);
+  const { data } = EditScheduleSchema.safeParse(values);
 
   if (!data) throw new Error('Invalid input types');
+
+  const existingSchedule = await db.schedule.findUnique({
+    where: {
+      userId: user.id,
+      id: data.scheduleId,
+      exerciseId: data.exerciseId,
+    },
+  });
+
+  if (!existingSchedule) throw new Error('Schedule not found');
 
   const dbReadyData = {
     ...data,
@@ -38,31 +48,15 @@ export async function addSchedule(values: z.infer<typeof AddScheduleSchema>) {
     }),
   };
 
-  const existingExercise = await db.exercise.findUnique({
+  const schedule = await db.schedule.update({
     where: {
       userId: user.id,
-      id: data.exerciseId,
+      id: data.scheduleId,
+      exerciseId: data.exerciseId,
     },
-  });
-  if (!existingExercise) throw new Error("Exercise doesn't exist");
-
-  const lastSchedule = await db.schedule.findFirst({
-    where: {
-      userId: user.id,
-      date: dbReadyData.date,
-    },
-    orderBy: {
-      order: 'desc',
-    },
-  });
-
-  const schedule = await db.schedule.create({
     data: {
-      userId: user.id,
-      exerciseId: dbReadyData.exerciseId,
-      date: dbReadyData.date,
-      order: lastSchedule ? lastSchedule.order + 1 : 0,
       exerciseSets: {
+        deleteMany: {},
         createMany: {
           data: dbReadyData.sets,
         },

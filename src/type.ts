@@ -14,3 +14,10 @@ export type SchedulePopulated = Schedule & {
   exercise: ExerciseWithLabel;
   exerciseSets: ExerciseSet[];
 };
+
+export type GroupedSets = {
+  sets: string;
+  weight: string;
+  reps: string;
+  duration: string;
+}[];

@@ -1,5 +1,4 @@
 'use client';
-import { addSchedule } from '@/actions/schedule/add-schedule';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -20,7 +19,7 @@ import {
 import { useGetExercises } from '@/hooks/use-get-exercies';
 import React, { type ChangeEvent, useTransition } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { AddScheduleSchema } from '@/schema/schedule.schema';
+import { EditScheduleSchema } from '@/schema/schedule.schema';
 import { z } from 'zod';
 import {
   Popover,
@@ -32,26 +31,30 @@ import { CalendarIcon, TrashIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { Input } from '@/components/ui/input';
+import { editSchedule } from '@/actions/schedule/edit-schedule';
 
-interface AddScheduleFormProps {
+interface EditScheduleFormProps {
   defaultValues?: {
-    date?: Date;
+    scheduleId: string;
+    date: Date;
+    sets: {
+      sets: string;
+      weight: string;
+      reps: string;
+      duration: string;
+    }[];
   };
   onSuccess?: () => void;
 }
 
-export const AddScheduleForm = ({
+export const EditScheduleForm = ({
   defaultValues,
   onSuccess,
-}: AddScheduleFormProps) => {
+}: EditScheduleFormProps) => {
   const [pending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof AddScheduleSchema>>({
-    resolver: zodResolver(AddScheduleSchema),
-    defaultValues: {
-      exerciseId: '',
-      date: defaultValues?.date,
-      sets: [],
-    },
+  const form = useForm<z.infer<typeof EditScheduleSchema>>({
+    resolver: zodResolver(EditScheduleSchema),
+    defaultValues: defaultValues,
   });
 
   const fieldArray = useFieldArray({
@@ -128,10 +131,10 @@ export const AddScheduleForm = ({
     onChange(`${hh}:${mm}:${ss}`);
   };
 
-  const handleSubmit = (values: z.infer<typeof AddScheduleSchema>) => {
+  const handleSubmit = (values: z.infer<typeof EditScheduleSchema>) => {
     console.log(values);
     startTransition(() => {
-      addSchedule(values)
+      editSchedule(values)
         .then(() => {
           console.log('success');
           onSuccess?.();
@@ -152,7 +155,7 @@ export const AddScheduleForm = ({
             <FormItem>
               <FormLabel>Exercise</FormLabel>
               <Select
-                disabled={pending}
+                disabled={true}
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
@@ -185,7 +188,7 @@ export const AddScheduleForm = ({
                     <PopoverTrigger asChild>
                       <Button
                         type='button'
-                        disabled={pending}
+                        disabled={true}
                         variant={'outline'}
                         className={cn(
                           'w-full justify-start text-left font-normal',
@@ -324,7 +327,7 @@ export const AddScheduleForm = ({
           Add set
         </Button>
         <Button className='w-full' disabled={pending}>
-          Add workout
+          Save changes
         </Button>
       </form>
     </Form>

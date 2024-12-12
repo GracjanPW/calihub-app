@@ -1,7 +1,7 @@
 'use client';
 import { deleteSchedule } from '@/actions/schedule/delete-schedule';
 import { Button } from '@/components/ui/button';
-import { formatSecondsToHHMMSS } from '@/lib/utils';
+import { formatSecondsToHMS } from '@/lib/utils';
 import {
   Exercise,
   ExerciseLabel,
@@ -10,7 +10,7 @@ import {
   Schedule,
 } from '@prisma/client';
 import chroma from 'chroma-js';
-import { Trash } from 'lucide-react';
+import { EditIcon, Trash } from 'lucide-react';
 
 interface ScheduleItemProps {
   data: Schedule & {
@@ -19,9 +19,10 @@ interface ScheduleItemProps {
     };
     exerciseSets: Pick<ExerciseSet, 'order' | 'reps' | 'weight' | 'duration'>[];
   };
+  edit: () => void;
 }
 
-export const ScheduleItem = ({ data }: ScheduleItemProps) => {
+export const ScheduleItem = ({ data, edit }: ScheduleItemProps) => {
   const deleteScheduleWithId = deleteSchedule.bind(null, data.id);
 
   return (
@@ -42,15 +43,20 @@ export const ScheduleItem = ({ data }: ScheduleItemProps) => {
             ))}
           </div>
         </div>
-        <form>
-          <Button
-            variant={'ghost'}
-            size={'icon'}
-            formAction={deleteScheduleWithId}
-          >
-            <Trash />
+        <div className='flex space-x-2'>
+          <Button variant={'ghost'} size={'icon'} onClick={edit}>
+            <EditIcon />
           </Button>
-        </form>
+          <form>
+            <Button
+              variant={'ghost'}
+              size={'icon'}
+              formAction={deleteScheduleWithId}
+            >
+              <Trash />
+            </Button>
+          </form>
+        </div>
       </div>
       {data.exerciseSets.length > 0 && (
         <ul>
@@ -68,7 +74,7 @@ export const ScheduleItem = ({ data }: ScheduleItemProps) => {
               {Number(set.duration) > 0
                 ? (Number(set.reps) > 0 || Number(set.weight) > 0
                     ? 'for '
-                    : '') + formatSecondsToHHMMSS(Number(set.duration))
+                    : '') + formatSecondsToHMS(Number(set.duration))
                 : null}
             </li>
           ))}

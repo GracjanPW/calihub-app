@@ -1,7 +1,4 @@
-import { Button } from '@/components/ui/button';
 import { PageHeader } from '../_components/page-header';
-import { getScheduleByDate } from '@/lib/db/schedule';
-import { PreviewWorkout } from '../workout/_components/preview-workout';
 import { TodaysWorkout } from './_components/todays-workout';
 import { Suspense } from 'react';
 
