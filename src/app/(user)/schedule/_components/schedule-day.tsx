@@ -9,7 +9,7 @@ import {
   Label,
   Schedule,
 } from '@prisma/client';
-import { format } from 'date-fns';
+import { format, toDate } from 'date-fns';
 import { ChevronDown, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { ScheduleItem } from './schedule-item';
@@ -47,7 +47,7 @@ export const ScheduleDay = ({
             className={cn('mr-1 transition', full && '-rotate-90')}
           />
         </Button>
-        <Button variant={'outline'} size={'icon'} onClick={addSchedule}>
+        <Button variant={'outline'} size={'icon'} onClick={addSchedule} disabled={toDate(date) < new Date()}>
           <Plus className='text-neutral-800' />
         </Button>
       </div>

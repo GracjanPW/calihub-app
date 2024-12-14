@@ -204,9 +204,11 @@ export const AddScheduleForm = ({
                   <PopoverContent className='w-auto p-0'>
                     <Calendar
                       mode='single'
+                      disabled={{before:new Date()}}
                       selected={field.value}
                       onSelect={field.onChange}
-                      initialFocus
+                      
+                      
                     />
                   </PopoverContent>
                 </Popover>

@@ -12,7 +12,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { AddScheduleForm } from './add-schedule-form';
 import { ScheduleDay } from './schedule-day';
-import { SchedulePopulated } from '@/type';
+import { GroupedSets, SchedulePopulated } from '@/type';
 import { EditScheduleSchema } from '@/schema/schedule.schema';
 import { formatSecondsToHHMMSS } from '@/lib/utils';
 import { EditScheduleForm } from './edit-schedule-form';
@@ -52,12 +52,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
       duration: formatSecondsToHHMMSS(item.duration),
     }));
 
-    const groupedSets = [] as {
-      sets: string;
-      weight: string;
-      reps: string;
-      duration: string;
-    }[];
+    const groupedSets:GroupedSets = []
 
     for (const set of sets) {
       const inGroup = groupedSets.findIndex(
