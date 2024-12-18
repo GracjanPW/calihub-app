@@ -44,13 +44,13 @@ export const ScheduleItem = ({ data, edit }: ScheduleItemProps) => {
           </div>
         </div>
         <div className='flex space-x-2'>
-          <Button variant={'ghost'} size={'icon'} onClick={edit}>
+          <Button variant={'ghost'} size={'iconSm'} onClick={edit}>
             <EditIcon />
           </Button>
           <form>
             <Button
               variant={'ghost'}
-              size={'icon'}
+              size={'iconSm'}
               formAction={deleteScheduleWithId}
             >
               <Trash />

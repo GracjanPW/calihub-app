@@ -13,9 +13,11 @@ import { useState } from 'react';
 import { AddScheduleForm } from './add-schedule-form';
 import { ScheduleDay } from './schedule-day';
 import { GroupedSets, SchedulePopulated } from '@/type';
-import { EditScheduleSchema } from '@/schema/schedule.schema';
+import { editScheduleSchema } from '@/schema/schedule.schema';
 import { formatSecondsToHHMMSS } from '@/lib/utils';
 import { EditScheduleForm } from './edit-schedule-form';
+import { isEqual, startOfDay } from 'date-fns';
+import { CopyScheduleForm } from './copy-schedule-form';
 
 interface ScheduleListProps {
   data: {
@@ -27,9 +29,14 @@ interface ScheduleListProps {
 export const ScheduleList = ({ data }: ScheduleListProps) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openCopy, setOpenCopy] = useState(false);
   const [defaultDate, setDefaultDate] = useState<Date>();
   const [defaultEditing, setDefaultEditing] =
-    useState<Zod.infer<typeof EditScheduleSchema>>();
+    useState<Zod.infer<typeof editScheduleSchema>>();
+  const [scheduleToCopy, setScheduleToCopy] = useState<{
+    date: Date;
+    scheduleIds: string[];
+  }>();
 
   const openAddDrawer = (date?: Date) => {
     setDefaultDate(date);
@@ -52,7 +59,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
       duration: formatSecondsToHHMMSS(item.duration),
     }));
 
-    const groupedSets:GroupedSets = []
+    const groupedSets: GroupedSets = [];
 
     for (const set of sets) {
       const inGroup = groupedSets.findIndex(
@@ -83,6 +90,23 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
     setOpenEdit(true);
   };
 
+  const openCopyDrawer = (date: Date) => {
+    date = startOfDay(date);
+    const daySchedule = data.find((item) =>
+      isEqual(startOfDay(item.date), date)
+    );
+    if (!daySchedule) return;
+    const scheduleIds = daySchedule?.schedule.reduce((acc, item) => {
+      acc.push(item.id);
+      return acc;
+    }, [] as string[]);
+    setScheduleToCopy({
+      date,
+      scheduleIds,
+    });
+    setOpenCopy(true);
+  };
+
   if (data.length === 0)
     return <div className='flex-1'>Problem retrieving schedule</div>;
   return (
@@ -96,6 +120,7 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
               schedule={day.schedule}
               addSchedule={() => openAddDrawer(day.date)}
               editSchedule={openEditDrawer}
+              copyScheduleDay={() => openCopyDrawer(day.date)}
             />
           ))}
         </div>
@@ -132,6 +157,28 @@ export const ScheduleList = ({ data }: ScheduleListProps) => {
             <EditScheduleForm
               defaultValues={defaultEditing}
               onSuccess={() => setOpenEdit(false)}
+            />
+          </div>
+          <DrawerFooter>
+            <DialogClose asChild>
+              <Button variant={'outline'}>Cancel</Button>
+            </DialogClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <Drawer open={openCopy} onOpenChange={setOpenCopy}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Copy exercise</DrawerTitle>
+            <DrawerDescription>
+              All scheduled exercies from this day will be copied to specified
+              day
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className='px-4'>
+            <CopyScheduleForm
+              defaultValues={scheduleToCopy}
+              onSuccess={() => setOpenCopy(false)}
             />
           </div>
           <DrawerFooter>

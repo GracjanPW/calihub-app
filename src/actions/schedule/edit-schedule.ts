@@ -3,15 +3,15 @@
 import { getUser } from '@/lib/auth/get-user';
 import { db } from '@/lib/db';
 import { separateSets } from '@/lib/utils';
-import { EditScheduleSchema } from '@/schema/schedule.schema';
+import { editScheduleSchema } from '@/schema/schedule.schema';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-export async function editSchedule(values: z.infer<typeof EditScheduleSchema>) {
+export async function editSchedule(values: z.infer<typeof editScheduleSchema>) {
   const user = await getUser();
   if (!user || !user.id) throw new Error('Unauthorized');
 
-  const { data } = EditScheduleSchema.safeParse(values);
+  const { data } = editScheduleSchema.safeParse(values);
 
   if (!data) throw new Error('Invalid input types');
 

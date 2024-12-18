@@ -24,7 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   adapter: PrismaAdapter(db),
   ...authConfig,
-  providers:[
+  providers: [
     ...authConfig.providers,
     Credentials({
       credentials: {
@@ -49,5 +49,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return existingUser;
       },
     }),
-  ]
+  ],
 });

@@ -9,8 +9,14 @@ import {
   Label,
   Schedule,
 } from '@prisma/client';
-import { format, toDate } from 'date-fns';
-import { ChevronDown, Plus } from 'lucide-react';
+import {
+  differenceInDays,
+  format,
+  isBefore,
+  startOfDay,
+  toDate,
+} from 'date-fns';
+import { ChevronDown, Copy, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { ScheduleItem } from './schedule-item';
 import chroma from 'chroma-js';
@@ -25,6 +31,7 @@ interface ScheduleDayProps {
   })[];
   addSchedule: () => void;
   editSchedule: (id: string) => void;
+  copyScheduleDay: () => void;
 }
 
 export const ScheduleDay = ({
@@ -32,6 +39,7 @@ export const ScheduleDay = ({
   schedule,
   addSchedule,
   editSchedule,
+  copyScheduleDay,
 }: ScheduleDayProps) => {
   const [full, setFull] = useState(false);
   return (
@@ -47,9 +55,24 @@ export const ScheduleDay = ({
             className={cn('mr-1 transition', full && '-rotate-90')}
           />
         </Button>
-        <Button variant={'outline'} size={'icon'} onClick={addSchedule} disabled={toDate(date) < new Date()}>
-          <Plus className='text-neutral-800' />
-        </Button>
+        <div className='flex space-x-1'>
+          <Button
+            variant={'outline'}
+            size={'icon'}
+            onClick={copyScheduleDay}
+            disabled={schedule.length === 0}
+          >
+            <Copy className='text-neutral-800' />
+          </Button>
+          <Button
+            variant={'outline'}
+            size={'icon'}
+            onClick={addSchedule}
+            disabled={isBefore(toDate(date), startOfDay(new Date()))}
+          >
+            <Plus className='text-neutral-800' />
+          </Button>
+        </div>
       </div>
       <Separator className='my-1 mb-2 bg-slate-400' />
       <div className={cn('mb-2 space-y-2', full ? '' : 'space-x-2')}>

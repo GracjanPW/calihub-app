@@ -20,7 +20,7 @@ import {
 import { useGetExercises } from '@/hooks/use-get-exercies';
 import React, { type ChangeEvent, useTransition } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { AddScheduleSchema } from '@/schema/schedule.schema';
+import { addScheduleSchema } from '@/schema/schedule.schema';
 import { z } from 'zod';
 import {
   Popover,
@@ -45,8 +45,8 @@ export const AddScheduleForm = ({
   onSuccess,
 }: AddScheduleFormProps) => {
   const [pending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof AddScheduleSchema>>({
-    resolver: zodResolver(AddScheduleSchema),
+  const form = useForm<z.infer<typeof addScheduleSchema>>({
+    resolver: zodResolver(addScheduleSchema),
     defaultValues: {
       exerciseId: '',
       date: defaultValues?.date,
@@ -128,7 +128,7 @@ export const AddScheduleForm = ({
     onChange(`${hh}:${mm}:${ss}`);
   };
 
-  const handleSubmit = (values: z.infer<typeof AddScheduleSchema>) => {
+  const handleSubmit = (values: z.infer<typeof addScheduleSchema>) => {
     console.log(values);
     startTransition(() => {
       addSchedule(values)
@@ -204,11 +204,9 @@ export const AddScheduleForm = ({
                   <PopoverContent className='w-auto p-0'>
                     <Calendar
                       mode='single'
-                      disabled={{before:new Date()}}
+                      disabled={{ before: new Date() }}
                       selected={field.value}
                       onSelect={field.onChange}
-                      
-                      
                     />
                   </PopoverContent>
                 </Popover>

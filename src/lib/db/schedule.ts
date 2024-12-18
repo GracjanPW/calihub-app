@@ -5,12 +5,7 @@
  * @param to - string
  */
 
-import {
-  eachDayOfInterval,
-  format,
-  isSameDay,
-  toDate,
-} from 'date-fns';
+import { eachDayOfInterval, format, isSameDay, toDate } from 'date-fns';
 import { getUser } from '../auth/get-user';
 import { db } from '../db';
 import { SchedulePopulated } from '@/type';

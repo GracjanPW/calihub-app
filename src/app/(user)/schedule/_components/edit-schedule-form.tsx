@@ -19,7 +19,7 @@ import {
 import { useGetExercises } from '@/hooks/use-get-exercies';
 import React, { type ChangeEvent, useTransition } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { EditScheduleSchema } from '@/schema/schedule.schema';
+import { editScheduleSchema } from '@/schema/schedule.schema';
 import { z } from 'zod';
 import {
   Popover,
@@ -52,8 +52,8 @@ export const EditScheduleForm = ({
   onSuccess,
 }: EditScheduleFormProps) => {
   const [pending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof EditScheduleSchema>>({
-    resolver: zodResolver(EditScheduleSchema),
+  const form = useForm<z.infer<typeof editScheduleSchema>>({
+    resolver: zodResolver(editScheduleSchema),
     defaultValues: defaultValues,
   });
 
@@ -131,7 +131,7 @@ export const EditScheduleForm = ({
     onChange(`${hh}:${mm}:${ss}`);
   };
 
-  const handleSubmit = (values: z.infer<typeof EditScheduleSchema>) => {
+  const handleSubmit = (values: z.infer<typeof editScheduleSchema>) => {
     console.log(values);
     startTransition(() => {
       editSchedule(values)

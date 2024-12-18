@@ -3,7 +3,7 @@ import { z } from 'zod';
 const refineIsNumber = (v: string) => !isNaN(Number(v));
 const refineIsTimeString = (v: string) => /^\d{2}:\d{2}:\d{2}$/.test(v);
 
-export const AddScheduleSchema = z.object({
+export const addScheduleSchema = z.object({
   exerciseId: z.string().min(1, {
     message: 'Exercise required',
   }),
@@ -48,7 +48,7 @@ export const AddScheduleSchema = z.object({
   ),
 });
 
-export const EditScheduleSchema = z.object({
+export const editScheduleSchema = z.object({
   scheduleId: z.string().min(1, {
     message: 'Schedule Id required',
   }),
@@ -94,4 +94,13 @@ export const EditScheduleSchema = z.object({
         }
       )
   ),
+});
+
+export const copyScheduleSchema = z.object({
+  date: z.date({
+    required_error: 'Date required',
+  }),
+  scheduleIds: z
+    .array(z.string())
+    .min(1, 'Must copy at least one scheduled exercise'),
 });
