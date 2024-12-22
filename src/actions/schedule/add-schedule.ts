@@ -4,7 +4,7 @@ import { getUser } from '@/lib/auth/get-user';
 import { db } from '@/lib/db';
 import { separateSets } from '@/lib/utils';
 import { addScheduleSchema } from '@/schema/schedule.schema';
-import { toDate } from 'date-fns';
+import { isBefore, startOfDay, toDate } from 'date-fns';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -15,7 +15,7 @@ export async function addSchedule(values: z.infer<typeof addScheduleSchema>) {
   const { data } = addScheduleSchema.safeParse(values);
 
   if (!data) throw new Error('Invalid input types');
-  if (toDate(data.date) < new Date())
+  if (isBefore(startOfDay(toDate(data.date)), startOfDay(new Date())))
     throw new Error('Can not schedule workouts in the past');
 
   const dbReadyData = {
