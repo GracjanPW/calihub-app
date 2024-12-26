@@ -35,8 +35,13 @@ export async function getScheduleByDate(
             },
           },
         },
-        exerciseSets: true,
+        exerciseSets: {
+          orderBy: {
+            order: "asc"
+          }
+        },
       },
+
     });
     return schedules.map((schedule) => ({
       ...schedule,

@@ -1,8 +1,10 @@
+import { completeSet } from '@/actions/workout/edit-set';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SchedulePopulated } from '@/type';
 import chroma from 'chroma-js';
 import { Check, Edit } from 'lucide-react';
+import { ExerciseSet } from './exercise-set';
 
 interface PreviewWorkoutProps {
   data: SchedulePopulated[];
@@ -29,32 +31,7 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
             <Separator />
             <div className='space-y-2 p-2'>
               {schedule.exerciseSets.map((set) => (
-                <div key={set.id} className='flex justify-between'>
-                  <p className='leading-6 text-muted-foreground'>
-                    {set.order + 1}:{' '}
-                    {Number(set.weight) > 0 ? set.weight + 'kg ' : null}
-                    {Number(set.reps) > 0
-                      ? (Number(set.weight) > 0 ? 'for ' : '') +
-                        set.reps +
-                        ' reps '
-                      : null}
-                    {Number(set.duration) > 0
-                      ? (Number(set.reps) > 0 || Number(set.weight) > 0
-                          ? 'for '
-                          : '') +
-                        set.duration +
-                        's'
-                      : null}
-                  </p>
-                  <div className='flex space-x-2'>
-                    <Button variant={'ghost'} size={'iconSm'}>
-                      <Edit className='size-2' />
-                    </Button>
-                    <Button variant={'ghost'} size={'iconSm'}>
-                      <Check />
-                    </Button>
-                  </div>
-                </div>
+                <ExerciseSet key={set.id} set={set}/>
               ))}
             </div>
           </div>
