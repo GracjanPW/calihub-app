@@ -37,17 +37,19 @@ export async function getScheduleByDate(
         },
         exerciseSets: {
           orderBy: {
-            order: "asc"
-          }
+            order: 'asc',
+          },
         },
       },
-
     });
     return schedules.map((schedule) => ({
       ...schedule,
       exerciseSets: schedule.exerciseSets.map((set) => ({
         ...set,
         weight: set.weight / 1000,
+        completedWeight: set.completedWeight
+          ? set.completedWeight / 1000
+          : null,
       })),
     }));
   } catch {

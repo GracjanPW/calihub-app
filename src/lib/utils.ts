@@ -21,6 +21,7 @@ export const getDateRange = (date: Date) => {
 };
 
 export const formatSecondsToHMS = (s: number) => {
+  if (s === 0) return '0';
   const hours = Math.floor(s / 3600);
   s %= 3600;
   const minutes = Math.floor(s / 60);
@@ -75,4 +76,13 @@ export const separateSets = (groupedSets: GroupedSets) => {
     }
   }
   return ungroupedSets;
+};
+
+export const HhMmSsToSeconds = (hhmmss: string) => {
+  const [hh, mm, ss] = hhmmss.split(':');
+  const secondsInHH = Number(hh) * 60 * 60;
+  const secondsInMM = Number(mm) * 60;
+  const seconds = Number(ss);
+  const duration = secondsInHH + secondsInMM + seconds;
+  return duration;
 };

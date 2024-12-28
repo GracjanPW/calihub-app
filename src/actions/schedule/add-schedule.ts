@@ -2,7 +2,7 @@
 
 import { getUser } from '@/lib/auth/get-user';
 import { db } from '@/lib/db';
-import { separateSets } from '@/lib/utils';
+import { HhMmSsToSeconds, separateSets } from '@/lib/utils';
 import { addScheduleSchema } from '@/schema/schedule.schema';
 import { isBefore, startOfDay, toDate } from 'date-fns';
 import { revalidatePath } from 'next/cache';
@@ -22,11 +22,7 @@ export async function addSchedule(values: z.infer<typeof addScheduleSchema>) {
     ...data,
     sets: separateSets(data.sets).map((set, i) => {
       const weight = Math.floor(Number(set.weight) * 1000);
-      const [hh, mm, ss] = set.duration.split(':');
-      const secondsInHH = Number(hh) * 60 * 60;
-      const secondsInMM = Number(mm) * 60;
-      const seconds = Number(ss);
-      const duration = secondsInHH + secondsInMM + seconds;
+      const duration = HhMmSsToSeconds(set.duration);
 
       const reps = Number(set.reps);
       const order = i;
