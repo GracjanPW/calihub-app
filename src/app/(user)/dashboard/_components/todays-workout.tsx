@@ -1,3 +1,4 @@
+import { ProgressBar } from '@/components/progress-bar';
 import { getScheduleByDate } from '@/lib/db/schedule';
 import { getMostRelavantLabel } from '@/lib/utils';
 import { ExerciseSet } from '@prisma/client';
@@ -24,18 +25,7 @@ export const TodaysWorkout = async () => {
               Today&apos;s Workout
             </p>
             <p className='text-xl font-semibold text-neutral-700'>{label}</p>
-            <div className='relative w-full overflow-hidden rounded-md bg-stone-100 shadow-inner shadow-stone-300'>
-              <div
-                style={{
-                  width: `${(completedSet.length / sets.length) * 100}%`,
-                }}
-                className='h-7 bg-green-400'
-              />
-              <p className='absolute right-1/2 top-1/2 -translate-y-1/2 translate-x-1/2 text-gray-600'>
-                {`${Math.floor((completedSet.length / sets.length) * 100)}%`}{' '}
-                Complete
-              </p>
-            </div>
+            <ProgressBar current={completedSet.length} target={sets.length}/>
             <p className='text-xs text-muted-foreground'>
               {todaysWorkout.length} Exercises, {sets.length} Sets
             </p>
