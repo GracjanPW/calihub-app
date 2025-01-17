@@ -19,6 +19,7 @@ import { useMemo, useState } from 'react';
 import { EditSetForm } from './edit-set-form';
 import { ExerciseSet as ESet } from '@prisma/client';
 import { PlusCircleIcon, PlusIcon } from 'lucide-react';
+import { AddSetForm } from './add-set-form';
 
 interface PreviewWorkoutProps {
   data: SchedulePopulated[];
@@ -27,6 +28,18 @@ interface PreviewWorkoutProps {
 export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [setToEdit, setSetToEdit] = useState<ESet | null>(null);
+  const [openAddSet,setOpenAddSet] = useState(false)
+  const [scheduleIdOfSet, setScheduleIdOfSet] = useState<string|null>(null)
+
+  const handleAddSet = (id:string) => {
+    setScheduleIdOfSet(id)
+    setOpenAddSet(true)
+  }
+
+  const closeAddSet = () => {
+    setScheduleIdOfSet(null)
+    setOpenAddSet(false)
+  }
 
   const allSets = useMemo(() => {
     return data.reduce((a, i) => {
@@ -73,7 +86,9 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
                     openEdit={() => openEditSet(set.id)}
                   />
                 ))}
-                <button className='mt-6 flex w-full items-center justify-center text-sm text-muted-foreground'>
+                <button 
+                  onClick={()=>handleAddSet(schedule.id)}
+                className='mt-6 flex w-full items-center justify-center text-sm text-muted-foreground'>
                   <span>Add</span>
                   <PlusIcon className='ml-1 size-4' />
                 </button>
@@ -100,6 +115,23 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
             </DialogClose>
           </DrawerFooter>
         </DrawerContent>
+      </Drawer>
+      <Drawer open={openAddSet} onOpenChange={setOpenAddSet}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>
+                Add a set
+              </DrawerTitle>
+            </DrawerHeader>
+            <div className='px-4'>
+              <AddSetForm scheduleId={scheduleIdOfSet!} onSuccess={closeAddSet}/>
+            </div>
+            <DrawerFooter>
+              <DialogClose asChild>
+                <Button variant={'outline'}>Cancel</Button>
+              </DialogClose>
+            </DrawerFooter>
+          </DrawerContent>
       </Drawer>
     </>
   );

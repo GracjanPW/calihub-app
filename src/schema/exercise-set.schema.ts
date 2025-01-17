@@ -15,3 +15,16 @@ export const updateExerciseSetSchema = z.object({
     .string()
     .refine(refineIsTimeString, { message: 'Invalid number' }),
 });
+
+export const addExerciseSetSchema = z.object({
+  scheduleId: z.string(),
+
+  weight: z.string().refine(refineIsNumber, { message: 'Invalid number' }),
+  reps: z.string().refine(refineIsNumber, { message: 'Invalid number' }),
+  duration: z
+    .string()
+    .refine(refineIsTimeString, { message: 'Invalid number' }),
+  completed: z.boolean({
+    required_error:'Required'
+  })
+});
