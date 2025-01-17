@@ -17,16 +17,19 @@ export const ExerciseSet = ({
 }) => {
   const completeSetById = completeSet.bind(null, set.id);
   return (
-    <div className='flex justify-between'>
-      <p className={cn('leading-6 text-muted-foreground')}>
+    <div
+      className={cn(
+        'flex items-center justify-between rounded-md p-1 transition-colors duration-200 ease-in-out',
+        set.completed && 'bg-emerald-100'
+      )}
+    >
+      <p className={cn('', set.completed && 'text-emerald-700')}>
         {set.order + 1}: {Number(set.weight) > 0 ? set.weight + 'kg ' : null}
         {set.completed &&
           (Number(set.completedWeight) === Number(set.weight) ? (
             ''
           ) : (
-            <span className='font-semibold text-orange-500'>
-              {set.completedWeight}Kg{' '}
-            </span>
+            <span className='text-orange-400'>{set.completedWeight}Kg </span>
           ))}
         {Number(set.reps) > 0
           ? (Number(set.weight) > 0 ? 'for ' : '') + set.reps + ' reps '
@@ -35,7 +38,7 @@ export const ExerciseSet = ({
           (Number(set.completedReps) === Number(set.reps) ? (
             ''
           ) : (
-            <span className='font-semibold text-orange-500'>
+            <span className='font-semibold text-orange-400'>
               {set.completedReps} reps{' '}
             </span>
           ))}
@@ -47,18 +50,16 @@ export const ExerciseSet = ({
           (Number(set.duration) === Number(set.completedDuration) ? (
             ''
           ) : (
-            <span className='font-semibold text-orange-500'>
+            <span className='font-semibold text-orange-400'>
               {formatSecondsToHMS(set.completedDuration!)}
             </span>
           ))}
       </p>
-      <div className='flex space-x-2'>
-        {!set.completed && (
-          <Button variant={'ghost'} size={'iconSm'} onClick={openEdit}>
-            <Edit className='size-2' />
-          </Button>
-        )}
-        <form>
+      <div className='flex h-min items-center space-x-2'>
+        <Button variant={'ghost'} size={'iconSm'} onClick={openEdit}>
+          <Edit className='size-2' />
+        </Button>
+        <form className='m-auto flex items-center justify-center'>
           <Button
             variant={'ghost'}
             size={'iconSm'}

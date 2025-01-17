@@ -18,6 +18,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { useMemo, useState } from 'react';
 import { EditSetForm } from './edit-set-form';
 import { ExerciseSet as ESet } from '@prisma/client';
+import { PlusCircleIcon, PlusIcon } from 'lucide-react';
 
 interface PreviewWorkoutProps {
   data: SchedulePopulated[];
@@ -72,6 +73,10 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
                     openEdit={() => openEditSet(set.id)}
                   />
                 ))}
+                <button className='mt-6 flex w-full items-center justify-center text-sm text-muted-foreground'>
+                  <span>Add</span>
+                  <PlusIcon className='ml-1 size-4' />
+                </button>
               </div>
             </div>
           ))}
