@@ -20,26 +20,31 @@ import { EditSetForm } from './edit-set-form';
 import { ExerciseSet as ESet } from '@prisma/client';
 import { PlusCircleIcon, PlusIcon } from 'lucide-react';
 import { AddSetForm } from './add-set-form';
+import { AddExerciseForm } from './add-exercise-form';
+import { AddScheduleForm } from '../../schedule/_components/add-schedule-form';
+import { toDate } from 'date-fns';
 
 interface PreviewWorkoutProps {
   data: SchedulePopulated[];
+  day: string;
 }
 
-export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
+export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [setToEdit, setSetToEdit] = useState<ESet | null>(null);
-  const [openAddSet,setOpenAddSet] = useState(false)
-  const [scheduleIdOfSet, setScheduleIdOfSet] = useState<string|null>(null)
+  const [openAddSet, setOpenAddSet] = useState(false);
+  const [scheduleIdOfSet, setScheduleIdOfSet] = useState<string | null>(null);
+  const [openAddExercise, setOpenAddExercise] = useState(false);
 
-  const handleAddSet = (id:string) => {
-    setScheduleIdOfSet(id)
-    setOpenAddSet(true)
-  }
+  const handleAddSet = (id: string) => {
+    setScheduleIdOfSet(id);
+    setOpenAddSet(true);
+  };
 
   const closeAddSet = () => {
-    setScheduleIdOfSet(null)
-    setOpenAddSet(false)
-  }
+    setScheduleIdOfSet(null);
+    setOpenAddSet(false);
+  };
 
   const allSets = useMemo(() => {
     return data.reduce((a, i) => {
@@ -86,15 +91,23 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
                     openEdit={() => openEditSet(set.id)}
                   />
                 ))}
-                <button 
-                  onClick={()=>handleAddSet(schedule.id)}
-                className='mt-6 flex w-full items-center justify-center text-sm text-muted-foreground'>
+                <button
+                  onClick={() => handleAddSet(schedule.id)}
+                  className='mt-6 flex w-full items-center justify-center text-sm text-muted-foreground'
+                >
                   <span>Add</span>
                   <PlusIcon className='ml-1 size-4' />
                 </button>
               </div>
             </div>
           ))}
+          <Separator />
+          <button
+            onClick={() => setOpenAddExercise(true)}
+            className='mx-auto flex w-full items-center justify-center rounded-md border py-1'
+          >
+            Add Exercise <PlusIcon className='size-4' />
+          </button>
         </div>
       </div>
       <Drawer open={openEdit} onOpenChange={setOpenEdit}>
@@ -117,21 +130,37 @@ export const PreviewWorkout = ({ data }: PreviewWorkoutProps) => {
         </DrawerContent>
       </Drawer>
       <Drawer open={openAddSet} onOpenChange={setOpenAddSet}>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>
-                Add a set
-              </DrawerTitle>
-            </DrawerHeader>
-            <div className='px-4'>
-              <AddSetForm scheduleId={scheduleIdOfSet!} onSuccess={closeAddSet}/>
-            </div>
-            <DrawerFooter>
-              <DialogClose asChild>
-                <Button variant={'outline'}>Cancel</Button>
-              </DialogClose>
-            </DrawerFooter>
-          </DrawerContent>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Add a set</DrawerTitle>
+          </DrawerHeader>
+          <div className='px-4'>
+            <AddSetForm scheduleId={scheduleIdOfSet!} onSuccess={closeAddSet} />
+          </div>
+          <DrawerFooter>
+            <DialogClose asChild>
+              <Button variant={'outline'}>Cancel</Button>
+            </DialogClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <Drawer open={openAddExercise} onOpenChange={setOpenAddExercise}>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Add a set</DrawerTitle>
+          </DrawerHeader>
+          <div className='px-4'>
+            <AddScheduleForm
+              defaultValues={{ date: toDate(day) }}
+              onSuccess={() => setOpenAddExercise(false)}
+            />
+          </div>
+          <DrawerFooter>
+            <DialogClose asChild>
+              <Button variant={'outline'}>Cancel</Button>
+            </DialogClose>
+          </DrawerFooter>
+        </DrawerContent>
       </Drawer>
     </>
   );

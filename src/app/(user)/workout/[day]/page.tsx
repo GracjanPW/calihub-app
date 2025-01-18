@@ -25,7 +25,7 @@ const WorkoutDayPage = async ({
         </h1>
         <ProgressBar current={completedSet.length} target={sets.length}/>
       </PageHeader>
-      <PreviewWorkout data={todaysWorkout} />
+      <PreviewWorkout data={todaysWorkout} day={day} />
     </div>
   );
 };
