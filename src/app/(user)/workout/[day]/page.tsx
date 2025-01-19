@@ -23,7 +23,9 @@ const WorkoutDayPage = async ({
         <h1 className='text-2xl font-semibold tracking-wider text-neutral-100 pb-2'>
           {label} Workout
         </h1>
-        <ProgressBar current={completedSet.length} target={sets.length}/>
+        {
+          sets.length > 0 && (<ProgressBar current={completedSet.length} target={sets.length}/>)
+        }
       </PageHeader>
       <PreviewWorkout data={todaysWorkout} day={day} />
     </div>

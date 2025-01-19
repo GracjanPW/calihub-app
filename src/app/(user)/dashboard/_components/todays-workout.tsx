@@ -32,9 +32,13 @@ export const TodaysWorkout = async () => {
           </div>
         </Link>
       ) : (
+        <Link href={`/workout/${format(today, 'yyyy-MM-dd')}`}>
+
         <div className='w-full space-y-2 rounded-md border bg-neutral-100 px-4 py-3 text-center shadow-sm shadow-neutral-700'>
-          No scheduled workout today!
+        <p className='text-sm text-muted-foreground'>No scheduled workout today!</p>
+        <p className='text-xl font-semibold text-neutral-700'>start unscheduled workout</p>
         </div>
+        </Link>
       )}
     </div>
   );
