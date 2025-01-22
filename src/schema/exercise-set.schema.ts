@@ -25,6 +25,6 @@ export const addExerciseSetSchema = z.object({
     .string()
     .refine(refineIsTimeString, { message: 'Invalid number' }),
   completed: z.boolean({
-    required_error:'Required'
-  })
+    required_error: 'Required',
+  }),
 });

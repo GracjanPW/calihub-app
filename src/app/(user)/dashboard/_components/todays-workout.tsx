@@ -25,7 +25,7 @@ export const TodaysWorkout = async () => {
               Today&apos;s Workout
             </p>
             <p className='text-xl font-semibold text-neutral-700'>{label}</p>
-            <ProgressBar current={completedSet.length} target={sets.length}/>
+            <ProgressBar current={completedSet.length} target={sets.length} />
             <p className='text-xs text-muted-foreground'>
               {todaysWorkout.length} Exercises, {sets.length} Sets
             </p>
@@ -33,11 +33,14 @@ export const TodaysWorkout = async () => {
         </Link>
       ) : (
         <Link href={`/workout/${format(today, 'yyyy-MM-dd')}`}>
-
-        <div className='w-full space-y-2 rounded-md border bg-neutral-100 px-4 py-3 text-center shadow-sm shadow-neutral-700'>
-        <p className='text-sm text-muted-foreground'>No scheduled workout today!</p>
-        <p className='text-xl font-semibold text-neutral-700'>start unscheduled workout</p>
-        </div>
+          <div className='w-full space-y-2 rounded-md border bg-neutral-100 px-4 py-3 text-center shadow-sm shadow-neutral-700'>
+            <p className='text-sm text-muted-foreground'>
+              No scheduled workout today!
+            </p>
+            <p className='text-xl font-semibold text-neutral-700'>
+              start unscheduled workout
+            </p>
+          </div>
         </Link>
       )}
     </div>

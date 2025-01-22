@@ -24,7 +24,7 @@ export const ExerciseSet = ({
       )}
     >
       <p className={cn('', set.completed && 'text-emerald-700')}>
-         {Number(set.weight) > 0 ? set.weight + 'kg ' : null}
+        {Number(set.weight) > 0 ? set.weight + 'kg ' : null}
         {set.completed &&
           (Number(set.completedWeight) === Number(set.weight) ? (
             ''
