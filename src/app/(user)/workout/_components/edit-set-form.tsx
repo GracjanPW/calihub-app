@@ -72,13 +72,14 @@ export const EditSetForm = ({ data, onSuccess }: AddScheduleFormProps) => {
   ) => {
     const value = e.currentTarget.value;
     let [hh, mm, ss]: string[] = value.split(':');
+    if (isNaN(Number(ss))) return
     let temp = '';
-    if (ss.length > 2) {
+    if (ss?.length > 2) {
       if (hh.charAt(0) !== '0') return;
       temp = ss.charAt(0);
       ss = ss.slice(1);
       mm += temp;
-    } else if (ss.length < 2) {
+    } else if (ss?.length < 2) {
       temp = mm.charAt(1);
       mm = mm.slice(0, -1);
       ss = temp + ss;

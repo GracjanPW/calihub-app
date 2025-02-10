@@ -95,32 +95,33 @@ export const AddScheduleForm = ({
   ) => {
     const value = e.currentTarget.value;
     let [hh, mm, ss]: string[] = value.split(':');
+    if (isNaN(Number(ss))) return
     let temp = '';
-    if (ss.length > 2) {
+    if (ss?.length > 2) {
       if (hh.charAt(0) !== '0') return;
       temp = ss.charAt(0);
       ss = ss.slice(1);
       mm += temp;
-    } else if (ss.length < 2) {
+    } else if (ss?.length < 2) {
       temp = mm.charAt(1);
       mm = mm.slice(0, -1);
       ss = temp + ss;
     }
-    if (mm.length > 2) {
+    if (mm?.length > 2) {
       if (hh.charAt(0) !== '0') return;
       temp = mm.charAt(0);
       mm = mm.slice(1);
       hh += temp;
-    } else if (mm.length < 2) {
+    } else if (mm?.length < 2) {
       temp = hh.charAt(1);
       hh = hh.slice(0, -1);
       mm = temp + mm;
     }
-    if (hh.length > 2) {
+    if (hh?.length > 2) {
       if (hh.charAt(0) !== '0') return;
       temp = hh.charAt(0);
       hh = hh.slice(1);
-    } else if (hh.length < 2) {
+    } else if (hh?.length < 2) {
       temp = '0';
       hh = temp + hh;
     }
@@ -157,8 +158,8 @@ export const AddScheduleForm = ({
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger className='w-full'>
-                    <SelectValue placeholder='Exercise' />
+                  <SelectTrigger className='w-full data-[placeholder]:text-muted-foreground'>
+                    <SelectValue placeholder='Select exercise' />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

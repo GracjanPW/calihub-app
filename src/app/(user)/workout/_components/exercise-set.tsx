@@ -23,37 +23,68 @@ export const ExerciseSet = ({
         set.completed && 'bg-emerald-100'
       )}
     >
-      <p className={cn('', set.completed && 'text-emerald-700')}>
-        {Number(set.weight) > 0 ? set.weight + 'kg ' : null}
-        {set.completed &&
-          (Number(set.completedWeight) === Number(set.weight) ? (
-            ''
-          ) : (
-            <span className='text-orange-400'>{set.completedWeight}Kg </span>
-          ))}
-        {Number(set.reps) > 0
-          ? (Number(set.weight) > 0 ? 'for ' : '') + set.reps + ' reps '
-          : null}
-        {set.completed &&
-          (Number(set.completedReps) === Number(set.reps) ? (
-            ''
-          ) : (
-            <span className='font-semibold text-orange-400'>
-              {set.completedReps} reps{' '}
-            </span>
-          ))}
-        {Number(set.duration) > 0
-          ? (Number(set.reps) > 0 || Number(set.weight) > 0 ? 'for ' : '') +
-            formatSecondsToHMS(set.duration)
-          : null}
-        {set.completed &&
-          (Number(set.duration) === Number(set.completedDuration) ? (
-            ''
-          ) : (
-            <span className='font-semibold text-orange-400'>
-              {formatSecondsToHMS(set.completedDuration!)}
-            </span>
-          ))}
+      <p className={cn('', set.completed && 'text-stone-700')}>
+      {Number(set.weight) > 0 ? (
+  set.completed && Number(set.completedWeight) !== Number(set.weight) ? (
+    <>
+      <span
+        className={cn(
+          'font-semibold',
+          Number(set.completedWeight) > Number(set.weight)
+            ? 'text-green-700'
+            : 'text-red-700'
+        )}
+      >
+        {set.completedWeight}
+      </span>{' '}
+      kg{' '}
+    </>
+  ) : (
+    set.weight + ' kg '
+  )
+) : null}
+
+{Number(set.reps) > 0 ? (
+  set.completed && Number(set.completedReps) !== Number(set.reps) ? (
+    <>
+      {Number(set.weight) > 0 ? 'for ' : ''}
+      <span
+        className={cn(
+          'font-semibold',
+          Number(set.completedReps) > Number(set.reps)
+            ? 'text-green-700'
+            : 'text-red-700'
+        )}
+      >
+        {set.completedReps}
+      </span>{' '}
+      reps{' '}
+    </>
+  ) : (
+    (Number(set.weight) > 0 ? 'for ' : '') + set.reps + ' reps '
+  )
+) : null}
+
+{Number(set.duration) > 0 ? (
+  set.completed && Number(set.completedDuration) !== Number(set.duration) ? (
+    <>
+      <span
+        className={cn(
+          'font-semibold',
+          Number(set.completedDuration) > Number(set.duration)
+            ? 'text-green-700'
+            : 'text-red-700'
+        )}
+      >
+        {formatSecondsToHMS(set.completedDuration!)}
+      </span>{' '}
+      duration{' '}
+    </>
+  ) : (
+    (Number(set.reps) > 0 || Number(set.weight) > 0 ? 'for ' : '') +
+    formatSecondsToHMS(set.duration) + ' duration '
+  )
+) : null}
       </p>
       <div className='flex h-min items-center space-x-2'>
         <Button variant={'ghost'} size={'iconSm'} onClick={openEdit}>

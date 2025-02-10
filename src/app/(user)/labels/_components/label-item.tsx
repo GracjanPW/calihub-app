@@ -12,25 +12,24 @@ export const LabelItem = ({ onClick, data }: LabelItemProps) => {
   const deleteLabelWithId = deleteLabel.bind(null, data.id);
   return (
     <div
-      style={{ backgroundColor: chroma(data.color).alpha(0.1).css() }}
-      className='flex items-center rounded-md p-2 pl-4 text-lg font-semibold text-neutral-600'
+      className='flex items-center rounded-md p-2 pl-4 text-lg font-semibold border text-neutral-600'
     >
       <div
-        className='mr-2 size-6 rounded-md shadow-sm shadow-neutral-600'
-        style={{ backgroundColor: data.color }}
-      />
+        className='mr-2 size-6 rounded-md shadow-sm shadow-neutral-600 flex justify-center text-sm leading-7 '
+        style={{ backgroundColor: data.color, color:  chroma.contrast(data.color, 'white') > chroma.contrast(data.color,'black') ? '#f1f1f1' : '#121212'}}
+      >{data.name[0]}</div>
       {data.name}
-      <div className='ml-auto flex rounded-md bg-transparent shadow-inner shadow-neutral-300'>
-        <Button variant={'ghost'} size={'icon'} onClick={onClick}>
+      <div className='text-black/80 ml-auto flex rounded-md bg-transparent space-x-2'>
+        <Button variant={'outline'} size={'iconMd'} onClick={onClick}>
           <Edit className='' />
         </Button>
         <form>
           <Button
-            variant={'ghost'}
-            size={'icon'}
+            variant={'destructive'}
+            size={'iconMd'}
             formAction={deleteLabelWithId}
           >
-            <Trash />
+            <Trash className='size-6!'/>
           </Button>
         </form>
       </div>

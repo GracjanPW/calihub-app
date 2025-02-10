@@ -21,7 +21,6 @@ import { ExerciseSet as ESet } from '@prisma/client';
 import { PlusCircleIcon, PlusIcon } from 'lucide-react';
 import { AddSetForm } from './add-set-form';
 import { AddExerciseForm } from './add-exercise-form';
-import { AddScheduleForm } from '../../schedule/_components/add-schedule-form';
 import { toDate } from 'date-fns';
 
 interface PreviewWorkoutProps {
@@ -132,7 +131,7 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
       <Drawer open={openAddSet} onOpenChange={setOpenAddSet}>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Add a set</DrawerTitle>
+            <DrawerTitle>Add Set</DrawerTitle>
           </DrawerHeader>
           <div className='px-4'>
             <AddSetForm scheduleId={scheduleIdOfSet!} onSuccess={closeAddSet} />
@@ -147,10 +146,10 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
       <Drawer open={openAddExercise} onOpenChange={setOpenAddExercise}>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Add a set</DrawerTitle>
+            <DrawerTitle>Add Exercise</DrawerTitle>
           </DrawerHeader>
           <div className='px-4'>
-            <AddScheduleForm
+            <AddExerciseForm
               defaultValues={{ date: toDate(day) }}
               onSuccess={() => setOpenAddExercise(false)}
             />

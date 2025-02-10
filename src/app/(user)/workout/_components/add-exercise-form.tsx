@@ -1,4 +1,5 @@
 'use client';
+import { addSchedule } from '@/actions/schedule/add-schedule';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -6,41 +7,52 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { type ChangeEvent, useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
 import {
-  addExerciseSetSchema,
-  updateExerciseSetSchema,
-} from '@/schema/exercise-set.schema';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useGetExercises } from '@/hooks/use-get-exercies';
+import React, { type ChangeEvent, useTransition } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { addScheduleSchema } from '@/schema/schedule.schema';
 import { z } from 'zod';
+import { TrashIcon } from 'lucide-react';
 
-import { formatSecondsToHHMMSS, formatSecondsToHMS } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { ExerciseSet } from '@prisma/client';
-import { editSet } from '@/actions/workout/edit-set';
-import { addSet } from '@/actions/workout/add-set';
-import { Check } from 'lucide-react';
 
-interface AddSetFormProps {
-  scheduleId: string;
+interface AddScheduleFormProps {
+  defaultValues?: {
+    date?: Date;
+  };
   onSuccess?: () => void;
 }
 
-export const AddExerciseForm = ({ scheduleId, onSuccess }: AddSetFormProps) => {
+export const AddExerciseForm = ({
+  defaultValues,
+  onSuccess,
+}: AddScheduleFormProps) => {
   const [pending, startTransition] = useTransition();
-  const [completed, setCompeted] = useState(false);
-  const form = useForm<z.infer<typeof addExerciseSetSchema>>({
-    resolver: zodResolver(addExerciseSetSchema),
+  const form = useForm<z.infer<typeof addScheduleSchema>>({
+    resolver: zodResolver(addScheduleSchema),
     defaultValues: {
-      scheduleId,
-      duration: '00:00:00',
-      reps: '0',
-      weight: '0',
-      completed: false,
+      exerciseId: '',
+      date: defaultValues?.date,
+      sets: [],
     },
   });
+
+  const fieldArray = useFieldArray({
+    control: form.control,
+    name: 'sets',
+  });
+
+  const { data, status } = useGetExercises();
 
   const handleNumberInput = (
     e: ChangeEvent<HTMLInputElement>,
@@ -76,13 +88,14 @@ export const AddExerciseForm = ({ scheduleId, onSuccess }: AddSetFormProps) => {
   ) => {
     const value = e.currentTarget.value;
     let [hh, mm, ss]: string[] = value.split(':');
+    if (isNaN(Number(ss))) return
     let temp = '';
-    if (ss.length > 2) {
+    if (ss?.length > 2) {
       if (hh.charAt(0) !== '0') return;
       temp = ss.charAt(0);
       ss = ss.slice(1);
       mm += temp;
-    } else if (ss.length < 2) {
+    } else if (ss?.length < 2) {
       temp = mm.charAt(1);
       mm = mm.slice(0, -1);
       ss = temp + ss;
@@ -109,98 +122,162 @@ export const AddExerciseForm = ({ scheduleId, onSuccess }: AddSetFormProps) => {
     onChange(`${hh}:${mm}:${ss}`);
   };
 
-  const handleSubmit = (values: z.infer<typeof addExerciseSetSchema>) => {
+  const handleSubmit = (values: z.infer<typeof addScheduleSchema>) => {
+    console.log(values);
     startTransition(() => {
-      addSet(values)
+      addSchedule(values)
         .then(() => {
+          console.log('success');
           onSuccess?.();
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+        });
     });
   };
+  // TODO: display validation error messages
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
         <FormField
           control={form.control}
-          name='weight'
+          name='exerciseId'
           render={({ field }) => (
-            <FormItem className='flex space-x-2'>
-              <FormLabel className='flex items-center justify-center'>
-                W(kg)
-              </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onChange={(e) => handleWeightInput(e, field.onChange)}
-                  disabled={pending}
-                  className='text-sm'
-                />
-              </FormControl>
+            <FormItem>
+              <FormLabel>Exercise</FormLabel>
+              <Select
+                disabled={pending}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className='w-full data-[placeholder]:text-muted-foreground'>
+                    <SelectValue placeholder='Select exercise' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {status === 'loading' && <p>Loading</p>}
+                  {data.map((exercise) => (
+                    <SelectItem key={exercise.id} value={exercise.id!}>
+                      {exercise.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='reps'
-          render={({ field }) => (
-            <FormItem className='flex space-x-2'>
-              <FormLabel className='flex items-center justify-center'>
-                Reps
-              </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onChange={(e) => handleNumberInput(e, field.onChange)}
-                  onKeyDown={(e) => e.key === '.' && e.preventDefault()}
-                  disabled={pending}
-                  className='text-sm'
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
+        {/* TODO: add order swap for sets */}
+        <ul className='space-y-4'>
+          {fieldArray.fields.map((field, idx) => (
+            <li
+              key={field.id}
+              className='flex items-end justify-start space-x-2'
+            >
+              <FormField
+                control={form.control}
+                name={`sets.${idx}.sets`}
+                render={({ field }) => (
+                  <FormItem className='!max-w-[40px]'>
+                    {idx === 0 && <FormLabel>Sets</FormLabel>}
+                    <FormControl>
+                      <Input
+                        {...field}
+                        onChange={(e) => handleNumberInput(e, field.onChange)}
+                        onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                        className='text-sm'
+                        disabled={pending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <FormField
-          control={form.control}
-          name='duration'
-          render={({ field }) => (
-            <FormItem className='flex space-x-2'>
-              <FormLabel className='flex items-center justify-center'>
-                T(hh:mm:ss)
-              </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  onChange={(e) => handleTimeInput(e, field.onChange)}
-                  onKeyDown={(e) => e.key === '.' && e.preventDefault()}
-                  min={0}
-                  disabled={pending}
-                  className='text-sm'
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <div className='flex items-center space-x-2'>
-          <p>Complete?</p>
-          <Button
-            type='button'
-            variant={'ghost'}
-            size={'iconSm'}
-            onClick={() => {
-              form.setValue('completed', !completed);
-              setCompeted((prev) => !prev);
-            }}
-            className='rounded-md border border-stone-500 shadow-inner'
-          >
-            {completed && (
-              <Check strokeWidth={4} className='text-emerald-700' />
-            )}
-          </Button>
-        </div>
-        <Button className='w-full' disabled={pending}>
+              <FormField
+                control={form.control}
+                name={`sets.${idx}.weight`}
+                render={({ field }) => (
+                  <FormItem>
+                    {idx === 0 && <FormLabel>W(kg)</FormLabel>}
+                    <FormControl>
+                      <Input
+                        {...field}
+                        onChange={(e) => handleWeightInput(e, field.onChange)}
+                        disabled={pending}
+                        className='text-sm'
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`sets.${idx}.reps`}
+                render={({ field }) => (
+                  <FormItem className='!max-w-[50px]'>
+                    {idx === 0 && <FormLabel>Reps</FormLabel>}
+                    <FormControl>
+                      <Input
+                        {...field}
+                        onChange={(e) => handleNumberInput(e, field.onChange)}
+                        onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                        disabled={pending}
+                        className='text-sm'
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`sets.${idx}.duration`}
+                render={({ field }) => (
+                  <FormItem className='!min-w-[90px]'>
+                    {idx === 0 && <FormLabel>T(hh:mm:ss)</FormLabel>}
+                    <FormControl>
+                      <Input
+                        {...field}
+                        onChange={(e) => handleTimeInput(e, field.onChange)}
+                        onKeyDown={(e) => e.key === '.' && e.preventDefault()}
+                        min={0}
+                        disabled={pending}
+                        className='text-sm'
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <Button
+                variant={'outline'}
+                className='aspect-square w-auto'
+                size={'icon'}
+                disabled={pending}
+                type='button'
+                onClick={() => fieldArray.remove(idx)}
+              >
+                <TrashIcon />
+              </Button>
+            </li>
+          ))}
+        </ul>
+        <Button
+          disabled={pending}
+          type='button'
+          onClick={() =>
+            fieldArray.append({
+              sets: '1',
+              weight: '0',
+              reps: '0',
+              duration: '00:00:00',
+            })
+          }
+        >
           Add set
+        </Button>
+        <Button className='w-full' disabled={pending}>
+          Add workout
         </Button>
       </form>
     </Form>

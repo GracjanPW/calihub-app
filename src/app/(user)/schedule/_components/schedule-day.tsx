@@ -48,12 +48,13 @@ export const ScheduleDay = ({
         <Button
           onClick={() => setFull((prev) => !prev)}
           variant={'ghost'}
-          className='flex items-center text-lg font-bold text-neutral-700'
+          className='flex items-center text-lg font-bold text-neutral-700 disabled:opacity-100'
+          disabled={schedule.length === 0}
         >
           {format(date, 'EEEE, do MMM')}
-          <ChevronDown
-            className={cn('mr-1 transition', full && '-rotate-90')}
-          />
+          {schedule.length > 0 && <ChevronDown
+            className={cn('mr-1 transition', full && '-rotate-90', )}
+          />}
         </Button>
         <div className='flex space-x-1'>
           <Button
@@ -77,7 +78,7 @@ export const ScheduleDay = ({
       <Separator className='my-1 mb-2 bg-slate-400' />
       <div className={cn('mb-2 space-y-2', full ? '' : 'space-x-2')}>
         {schedule.length === 0 && (
-          <div className='rounded-md border border-neutral-700 bg-neutral-300 p-4 text-center text-neutral-800'>
+          <div className='rounded-md border font-bold p-4 text-center text-neutral-800'>
             No exercies scheduled
           </div>
         )}

@@ -1,5 +1,6 @@
 'use client';
 import { deleteSchedule } from '@/actions/schedule/delete-schedule';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatSecondsToHMS } from '@/lib/utils';
 import {
@@ -28,29 +29,34 @@ export const ScheduleItem = ({ data, edit }: ScheduleItemProps) => {
   return (
     <div
       key={data.id}
-      className='flex flex-col rounded-md bg-neutral-100 p-2 pb-4 pl-4 font-medium text-neutral-700'
+      className='flex flex-col rounded-md border p-2 pb-4 pl-4 font-medium text-neutral-700'
     >
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center'>
-          {data.exercise.name}
-          <div className='ml-1 flex space-x-1'>
+      <div className='flex items-top justify-between space-x-2'>
+        <div className='flex flex-col justify-center items-start overflow-hidden'>
+          <p>{data.exercise.name}</p>
+          <div className='ml-1 space-x-1 overflow-scroll'>
             {data.exercise.exerciseLabels.map(({ label }) => (
-              <div
-                key={`${label.name}-${label.color}`}
-                style={{ backgroundColor: chroma(label.color).css() }}
-                className='size-2 rounded-full'
-              />
+                <Badge
+                  key={label.id}
+                  style={{
+                    backgroundColor: label.color,
+                    color: chroma.contrast(label.color, 'white') > chroma.contrast(label.color,'black') ? '#f1f1f1' : '#121212',
+                  }}
+                  className='border border-black/10 text-xs px-2'
+                >
+                  {label.name}
+                </Badge>
             ))}
           </div>
         </div>
         <div className='flex space-x-2'>
-          <Button variant={'ghost'} size={'iconSm'} onClick={edit}>
+          <Button variant={'outline'} size={'iconMd'} onClick={edit}>
             <EditIcon />
           </Button>
           <form>
             <Button
-              variant={'ghost'}
-              size={'iconSm'}
+              variant={'destructive'}
+              size={'iconMd'}
               formAction={deleteScheduleWithId}
             >
               <Trash />
@@ -59,14 +65,13 @@ export const ScheduleItem = ({ data, edit }: ScheduleItemProps) => {
         </div>
       </div>
       {data.exerciseSets.length > 0 && (
-        <ul>
+        <ul className=''>
           {data.exerciseSets.map((set) => (
             // TODO: data.exerciseId should be data.order, to be added
             <li
               key={`${data.id}-${data.exerciseId}-${set.order}`}
-              className='ml-2 text-sm text-muted-foreground'
+              className='ml-1 text-sm text-muted-foreground'
             >
-              {set.order + 1}:{' '}
               {Number(set.weight) > 0 ? set.weight + 'kg ' : null}
               {Number(set.reps) > 0
                 ? (Number(set.weight) > 0 ? 'for ' : '') + set.reps + ' reps '
