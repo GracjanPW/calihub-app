@@ -31,21 +31,25 @@ export const ScheduleItem = ({ data, edit }: ScheduleItemProps) => {
       key={data.id}
       className='flex flex-col rounded-md border p-2 pb-4 pl-4 font-medium text-neutral-700'
     >
-      <div className='flex items-top justify-between space-x-2'>
-        <div className='flex flex-col justify-center items-start overflow-hidden'>
+      <div className='items-top flex justify-between space-x-2'>
+        <div className='flex flex-col items-start justify-center overflow-hidden'>
           <p>{data.exercise.name}</p>
           <div className='ml-1 space-x-1 overflow-scroll'>
             {data.exercise.exerciseLabels.map(({ label }) => (
-                <Badge
-                  key={label.id}
-                  style={{
-                    backgroundColor: label.color,
-                    color: chroma.contrast(label.color, 'white') > chroma.contrast(label.color,'black') ? '#f1f1f1' : '#121212',
-                  }}
-                  className='border border-black/10 text-xs px-2'
-                >
-                  {label.name}
-                </Badge>
+              <Badge
+                key={label.id}
+                style={{
+                  backgroundColor: label.color,
+                  color:
+                    chroma.contrast(label.color, 'white') >
+                    chroma.contrast(label.color, 'black')
+                      ? '#f1f1f1'
+                      : '#121212',
+                }}
+                className='border border-black/10 px-2 text-xs'
+              >
+                {label.name}
+              </Badge>
             ))}
           </div>
         </div>

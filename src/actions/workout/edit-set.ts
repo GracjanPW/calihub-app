@@ -7,7 +7,7 @@ import { updateExerciseSetSchema } from '@/schema/exercise-set.schema';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-export async function completeSet(id: string, formData: FormData) {
+export async function completeSet(id: string) {
   const user = await getUser();
   if (!user || !user.id) throw new Error('Unauthorized');
 

@@ -4,7 +4,7 @@ import { DEFAULT_AUTH_REDIRECT } from '@/routes';
 import { signIn } from '@/lib/auth';
 import { getUserByEmail } from '@/lib/db/user';
 import { AuthError } from 'next-auth';
-import { isRedirectError } from 'next/dist/client/components/redirect';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 type State = {
   error?: string | null;

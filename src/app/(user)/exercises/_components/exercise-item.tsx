@@ -32,17 +32,19 @@ export const ExerciseItem = ({ data, onClick }: ExerciseItemProps) => {
         </div>
       </div>
       <div className='w-full items-center space-x-2 space-y-2'>
-        <Badge
-            className='border border-black/10 bg-black/10 text-black'
-          >
-            Labels
-          </Badge>
+        <Badge className='border border-black/10 bg-black/10 text-black'>
+          Labels
+        </Badge>
         {data.exerciseLabels.map(({ label }) => (
           <Badge
             key={label.id}
             style={{
               backgroundColor: label.color,
-              color: chroma.contrast(label.color, 'white') > chroma.contrast(label.color,'black') ? '#f1f1f1' : '#121212',
+              color:
+                chroma.contrast(label.color, 'white') >
+                chroma.contrast(label.color, 'black')
+                  ? '#f1f1f1'
+                  : '#121212',
             }}
             className='border border-black/10'
           >

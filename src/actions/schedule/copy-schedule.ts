@@ -2,7 +2,6 @@
 
 import { getUser } from '@/lib/auth/get-user';
 import { db } from '@/lib/db';
-import { separateSets } from '@/lib/utils';
 import { copyScheduleSchema } from '@/schema/schedule.schema';
 import { isBefore, startOfDay, toDate } from 'date-fns';
 import { revalidatePath } from 'next/cache';

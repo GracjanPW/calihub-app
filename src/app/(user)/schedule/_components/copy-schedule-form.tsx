@@ -1,5 +1,4 @@
 'use client';
-import { addSchedule } from '@/actions/schedule/add-schedule';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,7 +9,7 @@ import {
 } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import React, { type ChangeEvent, useTransition } from 'react';
+import React, { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { copyScheduleSchema } from '@/schema/schedule.schema';
 import { z } from 'zod';

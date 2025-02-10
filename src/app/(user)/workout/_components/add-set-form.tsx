@@ -10,16 +10,10 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import React, { type ChangeEvent, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  addExerciseSetSchema,
-  updateExerciseSetSchema,
-} from '@/schema/exercise-set.schema';
+import { addExerciseSetSchema } from '@/schema/exercise-set.schema';
 import { z } from 'zod';
 
-import { formatSecondsToHHMMSS, formatSecondsToHMS } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { ExerciseSet } from '@prisma/client';
-import { editSet } from '@/actions/workout/edit-set';
 import { addSet } from '@/actions/workout/add-set';
 import { Check } from 'lucide-react';
 
@@ -76,7 +70,7 @@ export const AddSetForm = ({ scheduleId, onSuccess }: AddSetFormProps) => {
   ) => {
     const value = e.currentTarget.value;
     let [hh, mm, ss]: string[] = value.split(':');
-    if (isNaN(Number(ss))) return
+    if (isNaN(Number(ss))) return;
     let temp = '';
     if (ss?.length > 2) {
       if (hh.charAt(0) !== '0') return;

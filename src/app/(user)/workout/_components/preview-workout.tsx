@@ -18,7 +18,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { useMemo, useState } from 'react';
 import { EditSetForm } from './edit-set-form';
 import { ExerciseSet as ESet } from '@prisma/client';
-import { PlusCircleIcon, PlusIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 import { AddSetForm } from './add-set-form';
 import { AddExerciseForm } from './add-exercise-form';
 import { toDate } from 'date-fns';
