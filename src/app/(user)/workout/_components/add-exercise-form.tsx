@@ -25,12 +25,14 @@ import { z } from 'zod';
 import { TrashIcon } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
+import { SchedulePopulated } from '@/type';
 
 interface AddScheduleFormProps {
   defaultValues?: {
     date?: Date;
   };
   onSuccess?: () => void;
+  optimisticUpdate:(data:SchedulePopulated)=>void
 }
 
 export const AddExerciseForm = ({
@@ -123,7 +125,6 @@ export const AddExerciseForm = ({
   };
 
   const handleSubmit = (values: z.infer<typeof addScheduleSchema>) => {
-    console.log(values);
     startTransition(() => {
       addSchedule(values)
         .then(() => {

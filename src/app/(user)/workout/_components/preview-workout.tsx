@@ -15,7 +15,7 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { DialogClose } from '@radix-ui/react-dialog';
-import { useMemo, useState } from 'react';
+import { useMemo, useOptimistic, useState } from 'react';
 import { EditSetForm } from './edit-set-form';
 import { ExerciseSet as ESet } from '@prisma/client';
 import { PlusIcon } from 'lucide-react';
@@ -34,6 +34,21 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
   const [openAddSet, setOpenAddSet] = useState(false);
   const [scheduleIdOfSet, setScheduleIdOfSet] = useState<string | null>(null);
   const [openAddExercise, setOpenAddExercise] = useState(false);
+  const [optimisticData, addOptimisticData] = useOptimistic<SchedulePopulated[],{action:string,data:any}>(data, (state,{action,data})=>{
+    switch (action) {
+      case "add":
+        return [...state,data]
+      case "edit":
+      case "uncomplete":
+      case "complete":
+        state[data.scheduleIndex].exerciseSets[data.setIndex].completed = action === 'complete'
+        return [...state]
+      
+      default:
+        return state
+    }
+  })
+
 
   const handleAddSet = (id: string) => {
     setScheduleIdOfSet(id);
@@ -67,7 +82,7 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
     <>
       <div className='flex-1 overflow-y-auto'>
         <div className='h-0 space-y-4'>
-          {data.map((schedule) => (
+          {optimisticData.map((schedule,scheduleIndex) => (
             <div key={schedule.id}>
               <div className='flex items-center space-x-3 rounded-md p-1 px-3 text-lg font-medium text-neutral-700'>
                 <p>{schedule.exercise.name}</p>
@@ -83,11 +98,12 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
               </div>
               <Separator />
               <div className='space-y-2 p-2'>
-                {schedule.exerciseSets.map((set) => (
+                {schedule.exerciseSets.map((set,setIndex) => (
                   <ExerciseSet
                     key={set.id}
                     set={set}
                     openEdit={() => openEditSet(set.id)}
+                    optimisticComplete={(complete)=>addOptimisticData({action:complete?'complete':'uncomplete',data:{scheduleIndex, setIndex}})}
                   />
                 ))}
                 <button
@@ -112,10 +128,9 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
       <Drawer open={openEdit} onOpenChange={setOpenEdit}>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Schedule an exercise</DrawerTitle>
+            <DrawerTitle>Edit set</DrawerTitle>
             <DrawerDescription>
-              select an exercise and choose what day you want it on, you can
-              change this later
+              Make changes to have many reps, weight or duration you actually achieved if different to the target.
             </DrawerDescription>
           </DrawerHeader>
           <div className='px-4'>
@@ -152,6 +167,7 @@ export const PreviewWorkout = ({ data, day }: PreviewWorkoutProps) => {
             <AddExerciseForm
               defaultValues={{ date: toDate(day) }}
               onSuccess={() => setOpenAddExercise(false)}
+              optimisticUpdate={(data:SchedulePopulated)=>addOptimisticData({action:'add',data})}
             />
           </div>
           <DrawerFooter>

@@ -7,11 +7,17 @@ import { Check, Edit } from 'lucide-react';
 export const ExerciseSet = ({
   set,
   openEdit,
+  optimisticComplete
 }: {
   set: Set;
   openEdit: () => void;
+  optimisticComplete: (complete:boolean)=>void
 }) => {
   const completeSetById = completeSet.bind(null, set.id);
+  const formAction = () => {
+    optimisticComplete(!set.completed)
+    return completeSetById()
+  }
   return (
     <div
       className={cn(
@@ -93,7 +99,7 @@ export const ExerciseSet = ({
           <Button
             variant={'ghost'}
             size={'iconSm'}
-            formAction={completeSetById}
+            formAction={formAction}
             className='rounded-md border border-stone-500 shadow-inner'
           >
             {set.completed && (

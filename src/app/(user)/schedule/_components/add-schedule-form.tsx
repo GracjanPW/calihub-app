@@ -216,7 +216,14 @@ export const AddScheduleForm = ({
           }}
         />
         {/* TODO: add order swap for sets */}
-        <ul className='space-y-4'>
+        <div className='flex justify-between w-full items-center text-center p-1'>
+          <p className='min-w-[40px]'>Sets</p>
+          <p className='grow'>W(kg)</p>
+          <p className='min-w-[40px]'>Reps</p>
+          <p className='grow'>T(hh:mm:ss)</p>
+          <p className='min-w-[40px]'>{' '}</p>
+        </div>
+        <ul className='space-y-4 max-h-[200px] overflow-scroll p-1'>
           {fieldArray.fields.map((field, idx) => (
             <li
               key={field.id}
@@ -227,7 +234,7 @@ export const AddScheduleForm = ({
                 name={`sets.${idx}.sets`}
                 render={({ field }) => (
                   <FormItem className='!max-w-[40px]'>
-                    {idx === 0 && <FormLabel>Sets</FormLabel>}
+                    <FormLabel hidden>Sets</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -247,7 +254,7 @@ export const AddScheduleForm = ({
                 name={`sets.${idx}.weight`}
                 render={({ field }) => (
                   <FormItem>
-                    {idx === 0 && <FormLabel>W(kg)</FormLabel>}
+                    <FormLabel hidden>Weight</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -264,7 +271,7 @@ export const AddScheduleForm = ({
                 name={`sets.${idx}.reps`}
                 render={({ field }) => (
                   <FormItem className='!max-w-[50px]'>
-                    {idx === 0 && <FormLabel>Reps</FormLabel>}
+                    <FormLabel hidden>Reps</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -283,7 +290,7 @@ export const AddScheduleForm = ({
                 name={`sets.${idx}.duration`}
                 render={({ field }) => (
                   <FormItem className='!min-w-[90px]'>
-                    {idx === 0 && <FormLabel>T(hh:mm:ss)</FormLabel>}
+                    <FormLabel hidden>Duration</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
